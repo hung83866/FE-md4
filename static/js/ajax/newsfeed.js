@@ -32,7 +32,7 @@ function postNewsfeed() {
 
         success: function (posts) {
             let content = "";
-            for (let i = posts.length-1; i >= 0; i--) {
+            for (let i = posts.length - 1; i >= 0; i--) {
                 content += postDetail(posts[i]);
             }
 
@@ -241,60 +241,138 @@ function getNonFriend() {
     })
 }
 
-function getTimeLine(idUser, idFriend){
-    localStorage.setItem("accountFriend",idFriend);
-    window.open("time-line.html","_blank");
+function getTimeLine(idUser, idFriend) {
+    localStorage.setItem("accountFriend", idFriend);
+    window.open("time-line.html", "_blank");
     event.preventDefault();
 }
 
-function getTimelineFriend(){
+function getTimelineFriend() {
     let idUser = localStorage.getItem("accountId");
-    window.open("timeline-friends.html","_blank");
+    window.open("timeline-friends.html", "_blank");
     event.preventDefault();
 }
 
 function getMyTimeLine() {
     let idUser = localStorage.getItem("accountId");
     localStorage.setItem("accountFriend", idUser);
-    window.open("time-line.html","_blank");
+    window.open("time-line.html", "_blank");
     event.preventDefault();
 }
 
-function addNewPost(){
-    let img = resultImage();
-    let video = $('#video').val();
-    let content = $('#contentPost').val();
-    let status = $('#statusPost').val();
-    let idPost = localStorage.getItem("accountId");
-    let newPost = {
-        video:video,
-        imageFile:img,
-        content: content,
-        status: status,
-        userPost: {
-            idUser: idPost
-        }
-    }
-
+function postList() {
+    let idUser = +parseInt(window.localStorage.getItem("iduser"));
+    let str = ""
     $.ajax({
-        type: "POST",
-        url: `http://localhost:8080/post`,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+        type: "GET",
+        url: `http://localhost:8080/users/view/` + idUser,
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                str += `
+
+<div class="central-meta item">
+        <div class="user-post">
+            <div class="friend-info">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-start align-items-center">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="60"
+                                 height="60" />
+                            <div>
+                                <h6 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h6>
+                                <p class="text-muted small mb-0">
+                                    Shared publicly - Jan 2020
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="mt-3 mb-4 pb-2">
+                           ${data[i].content}
+                        </p>
+                        <img src="${data[i].imageFile}" alt="">
+                        <div class="small d-flex justify-content-start">
+                            <a href="#!" class="d-flex align-items-center me-3">
+                                <i class="far fa-thumbs-up me-2"></i>
+                                <p style="float: right" class="mb-0">Like</p>
+                            </a>
+                            
+                            <a href="#!" class="d-flex align-items-center me-3">
+                                <i class="far fa-comment-dots me-2"></i>
+                                <p class="mb-0">Comment</p>
+                            </a>
+                            <a href="#!" class="d-flex align-items-center me-3">
+                                <i class="fas fa-share me-2"></i>
+                                <p class="mb-0">Share</p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                        <div class="d-flex flex-start w-100">
+                            <div>
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="40"
+                                 height="40" />
+</div>
+                            <div style="float: right;width: 70%" class="form-outline w-100">
+                <textarea placeholder="Comment here" class="form-control" id="textAreaExample" rows="4"
+                          style="background: #fff;"></textarea>
+                             
+                            </div>
+                        </div>
+                        <div class="float-end mt-2 pt-1">
+                            <button type="button" class="btn btn-primary btn-sm">Post comment</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+`
+            }
+            document.getElementById("showPost").innerHTML = str;
+            console.log(str)
         },
-        data: JSON.stringify(newPost),
-        success: function (data){
-            // console.log("Done")
-            window.open("mypage.html", "_self")
-        },
-        error: function (){
+        error: function () {
             console.log("sai o dau do")
         }
     })
 }
 
-function commentInPost(idPost){
+function addNewPost() {
+    let img = resultImage();
+    let video = $('#video').val();
+    let content = $('#contentPost').val();
+    let status = $('#statusPost').val();
+    let iduser = +parseInt(window.localStorage.getItem("iduser"));
+    let newPost = {
+        video: video,
+        imageFile: img,
+        content: content,
+        status: status
+    }
+
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8080/post/` + iduser,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(newPost),
+        success: function (data) {
+            // console.log("Done")
+            window.open("mypage.html", "_self")
+            postlist()
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+
+function commentInPost(idPost) {
     let idComment = localStorage.getItem("accountId");
 
     let content = document.getElementById(`commentContent(${idPost})`).value;
@@ -315,7 +393,7 @@ function commentInPost(idPost){
         data: JSON.stringify(newComment),
         url: `http://localhost:8080/comment/${idPost}/commentInPost`,
 
-        success: function (){
+        success: function () {
             postNewsfeed();
             console.log("xong nha")
         }
@@ -323,15 +401,15 @@ function commentInPost(idPost){
     })
 }
 
-function getJoinedGroup(){
+function getJoinedGroup() {
     let idUser = localStorage.getItem("accountId");
     localStorage.setItem("accountFriend", idUser);
-    window.open("timeline-groups.html","_blank");
+    window.open("timeline-groups.html", "_blank");
     event.preventDefault();
 }
 
 
-window.onload = function (){
+window.onload = function () {
     addUser();
     getNonFriend();
     getFriendList();

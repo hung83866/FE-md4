@@ -16,7 +16,7 @@ function login() {
         success: function (data) {
             console.log("hello anh em")
             console.log(data.id)
-            localStorage.setItem("accountId", data.id)
+            localStorage.setItem("iduser", data.id)
             localStorage.setItem("token", data.token)
             window.open("mypage.html", "_self")
             if (data.status == 202) {
