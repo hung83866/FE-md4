@@ -19,6 +19,9 @@
 
 </head>
 <body>
+<script>window.onload=function (){
+    postList()
+}</script>
 <!--<div class="se-pre-con"></div>-->
 <div class="theme-layout">
 
@@ -421,7 +424,7 @@
                 </li>
             </ul>
             <div class="user-img">
-                <img src="../static/images/resources/admin.jpg" alt="">
+                <div id="avatarU"></div>
                 <span class="status f-online"></span>
                 <div class="user-setting">
                     <a href="#" title=""><span class="status f-online"></span>online</a>
@@ -492,11 +495,12 @@
                                 <div class="central-meta">
                                     <div class="new-postbox">
                                         <figure>
-                                            <span id="imagePost"></span>
+                                            <div id="avatarU1"></div>
                                         </figure>
                                         <div class="newpst-input">
                                             <form method="post">
                                                 <textarea name="contentPost" id="contentPost" rows="2" placeholder="write something"></textarea>
+                                                <div id="imgDiv"></div>
                                                 <div class="attachments">
                                                     <ul>
                                                         <li>
@@ -533,8 +537,7 @@
                                         </div>
                                     </div>
                                 </div><!-- add post new box -->
-                                <button onclick="postList()">show</button>
-                                <div id="imgDiv"></div>
+
                                 <div class="central-meta" id="showPost"></div>
                                 <div class="loadMore" id="postInNewsfeed">
                                 </div>

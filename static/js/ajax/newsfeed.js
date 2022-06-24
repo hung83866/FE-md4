@@ -263,11 +263,27 @@ function getMyTimeLine() {
 function postList() {
     let idUser = +parseInt(window.localStorage.getItem("iduser"));
     let str = ""
+    let str1 = ""
+    let str2 = ""
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/users/` + idUser,
+        success: function (data) {
+            str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
+            str2 = `<img src="${data.avatar}" alt="avatar" height="60px" width="60px" style="border-radius: 100%"> `
+            document.getElementById("avatarU").innerHTML = str1
+            document.getElementById("avatarU1").innerHTML = str2
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+
     $.ajax({
         type: "GET",
         url: `http://localhost:8080/users/view/` + idUser,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
+            for (let i = data.length - 1; i > 0; i--) {
                 str += `
 
 <div class="central-meta item">
@@ -276,35 +292,51 @@ function postList() {
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-start align-items-center">
-                            <img class="rounded-circle shadow-1-strong me-3"
-                                 src="${data[i].userPost.avatar}" alt="avatar" width="60"
-                                 height="60" />
-                            <div>
-                                <h6 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h6>
+                        <div style="width: 80px"><img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="50"
+                                 height="50" /></div>
+                            
+                            <div style="width: 200px">
+                                <h5 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
                                 <p class="text-muted small mb-0">
-                                    Shared publicly - Jan 2020
+                                    <p>status : ${data[i].status}</p>
                                 </p>
+                                <p class="text-muted small mb-0">
+                                    <p>time : ${data[i].time}</p>
+                                </p>
+                            </div>
+                            <div style="width: 350px" >
+                                <img src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 15px; float: right">
+                            </div>  
+                            <div style="width: 35px">
+                                <img onclick="if (confirm('Bạn có muốn xóa bài này không?')) deletePost(${data[i].idPost})" src="https://img.icons8.com/ios-glyphs/2x/filled-trash.png" style="width: 15px; float: right">
                             </div>
                         </div>
 
-                        <p class="mt-3 mb-4 pb-2">
+                        <h5 class="mt-3 mb-4 pb-2">
                            ${data[i].content}
-                        </p>
+                        </h5>
                         <img src="${data[i].imageFile}" alt="">
                         <div class="small d-flex justify-content-start">
-                            <a href="#!" class="d-flex align-items-center me-3">
-                                <i class="far fa-thumbs-up me-2"></i>
-                                <p style="float: right" class="mb-0">Like</p>
-                            </a>
+                            <div style="width: 180px;height: 30px ;text-align: center;margin-top: 10px">
+                                <a href="#!" >
+                                    <i class="far fa-thumbs-up me-2"></i>
+                                    <p style="text-align: center">Like</p>
+                                </a>
+                            </div>
                             
-                            <a href="#!" class="d-flex align-items-center me-3">
-                                <i class="far fa-comment-dots me-2"></i>
-                                <p class="mb-0">Comment</p>
-                            </a>
-                            <a href="#!" class="d-flex align-items-center me-3">
-                                <i class="fas fa-share me-2"></i>
-                                <p class="mb-0">Share</p>
-                            </a>
+                            <div style="width: 180px;height: 30px ; text-align: center;margin-top: 10px">
+                                <a href="#!">
+                                    <i class="far fa-comment-dots me-2"></i>
+                                    <p class="mb-0">Comment</p>
+                                </a>
+                            </div>
+                            <div style="width: 180px;height: 30px; text-align: center;margin-top: 10px">
+                                <a href="#!" >
+                                    <i class="fas fa-share me-2"></i>
+                                    <p class="mb-0">Share</p>
+                                </a>
+                            </div>         
                         </div>
                     </div>
                     <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
@@ -315,8 +347,8 @@ function postList() {
                                  height="40" />
 </div>
                             <div style="float: right;width: 70%" class="form-outline w-100">
-                <textarea placeholder="Comment here" class="form-control" id="textAreaExample" rows="4"
-                          style="background: #fff;"></textarea>
+                <textarea placeholder="Comment here.."  class="form-control" id="textAreaExample" rows="4"
+                          style="background: #fff; height: 50px"></textarea>
                              
                             </div>
                         </div>
@@ -364,7 +396,7 @@ function addNewPost() {
         success: function (data) {
             // console.log("Done")
             window.open("mypage.html", "_self")
-            postlist()
+            postList()
         },
         error: function () {
             console.log("sai o dau do")
@@ -415,4 +447,18 @@ window.onload = function () {
     getFriendList();
     postNewsfeed();
 
+}
+function deletePost(id) {
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        type: 'DELETE',
+        url: 'http://localhost:8080/post/' + id,
+        success: function (data) {
+            postList(data)
+        }
+    })
 }
