@@ -265,14 +265,24 @@ function postList() {
     let str = ""
     let str1 = ""
     let str2 = ""
+    let str3 = ""
+    let str4 = ""
+    let name = ""
     $.ajax({
         type: "GET",
         url: `http://localhost:8080/users/` + idUser,
         success: function (data) {
             str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
             str2 = `<img src="${data.avatar}" alt="avatar" height="60px" width="60px" style="border-radius: 100%"> `
+            str3 = `<img src="${data.avatar}" alt="avatar" > `
+            str4 = `<img src="${data.image}" alt="avatar" > `
+            name = `<h5 style="color: #2a62bc">${data.name}</h5>`
             document.getElementById("avatarU").innerHTML = str1
             document.getElementById("avatarU1").innerHTML = str2
+            document.getElementById("avatarU2").innerHTML = str3
+            document.getElementById("avatarU3").innerHTML = str4
+            document.getElementById("nameU").innerHTML = name
+            console.log(data.image)
         },
         error: function () {
             console.log("sai o dau do")
@@ -296,18 +306,18 @@ function postList() {
                                  src="${data[i].userPost.avatar}" alt="avatar" width="50"
                                  height="50" /></div>
                             
-                            <div style="width: 200px">
+                            <div style="width: 400px">
                                 <h5 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
                                 <p class="text-muted small mb-0">
                                     <p>status : ${data[i].status}</p>
-                                </p>
-                                <p class="text-muted small mb-0">
                                     <p>time : ${data[i].time}</p>
                                 </p>
+                              
                             </div>
                             <div style="width: 350px" >
-                                <img src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 15px; float: right">
-                            </div>  
+                                <img onclick="editP(${data[i].idPost})" src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 15px; float: right">
+                            </div>
+                        
                             <div style="width: 35px">
                                 <img onclick="if (confirm('Bạn có muốn xóa bài này không?')) deletePost(${data[i].idPost})" src="https://img.icons8.com/ios-glyphs/2x/filled-trash.png" style="width: 15px; float: right">
                             </div>
@@ -348,7 +358,7 @@ function postList() {
 </div>
                             <div style="float: right;width: 70%" class="form-outline w-100">
                 <textarea placeholder="Comment here.."  class="form-control" id="textAreaExample" rows="4"
-                          style="background: #fff; height: 50px"></textarea>
+                          style="background: #fff; height: 50px;border-radius: 50px"></textarea>
                              
                             </div>
                         </div>
@@ -364,12 +374,14 @@ function postList() {
 `
             }
             document.getElementById("showPost").innerHTML = str;
-            console.log(str)
         },
         error: function () {
             console.log("sai o dau do")
         }
     })
+}
+function editP(idPost){
+    let str = "";
 }
 
 function addNewPost() {
@@ -462,3 +474,105 @@ function deletePost(id) {
         }
     })
 }
+
+function postListAll() {
+    let idUser = +parseInt(window.localStorage.getItem("iduser"))
+    let str = ""
+    let str1 = ""
+    let str2 = ""
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/users/` + idUser,
+        success: function (data) {
+            str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
+            str2 = `<img src="${data.avatar}" alt="avatar" height="60px" width="60px" style="border-radius: 100%"> `
+            document.getElementById("avatarU").innerHTML = str1
+            document.getElementById("avatarU1").innerHTML = str2
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/post`,
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                str += `
+
+<div class="central-meta item">
+        <div class="user-post">
+            <div class="friend-info">
+                <div class="card">
+                        <div class="d-flex flex-start align-items-center">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="60"
+                                 height="60" />
+                            <div>
+                                <h6 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h6>
+                                <p class="text-muted small mb-0">
+                                    Shared publicly - Jan 2020
+                                </p>
+                            </div>
+<!--  sửa xóa-->
+                            
+<!--  end-->
+                        </div>
+                        <p class="mt-3 mb-4 pb-2">
+                           ${data[i].content}
+                        </p>
+                        <img src="${data[i].imageFile}" alt="">
+<!--                      minhh  fix-->
+                        <div class="small d-flex justify-content-start">
+                            <div style="width: 180px;height: 30px ;text-align: center;margin-top: 10px">
+                                <a href="#!" >
+                                    <i class="far fa-thumbs-up me-2"></i>
+                                    <p style="text-align: center">Like</p>
+                                </a>
+                            </div>
+                            
+                            <div style="width: 180px;height: 30px ; text-align: center;margin-top: 10px">
+                                <a href="#!">
+                                    <i class="far fa-comment-dots me-2"></i>
+                                    <p class="mb-0">Comment</p>
+                                </a>
+                            </div>
+                            <div style="width: 180px;height: 30px; text-align: center;margin-top: 10px">
+                                <a href="#!" >
+                                    <i class="fas fa-share me-2"></i>
+                                    <p class="mb-0">Share</p>
+                                </a>
+</div>         
+                        </div>
+                    </div>
+                    <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                        <div class="d-flex flex-start w-100">
+                            <div>
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="40"
+                                 height="40" />
+</div>
+                            <div style="float: right;width: 70%" class="form-outline w-100">
+                <textarea placeholder="Comment here.."  class="form-control" id="textAreaExample" rows="4"
+                          style="background: #fff; height: 50px;border-radius: 50px"></textarea>
+                             
+                            </div>
+                        </div>
+                        <div class="float-end mt-2 pt-1">
+                            <button type="button" class="btn btn-primary btn-sm">Post comment</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+`
+            }
+            document.getElementById("showPost").innerHTML = str;
+            console.log(str)
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })}

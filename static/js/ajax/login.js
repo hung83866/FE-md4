@@ -18,7 +18,7 @@ function login() {
             console.log(data.id)
             localStorage.setItem("iduser", data.id)
             localStorage.setItem("token", data.token)
-            window.open("mypage.html", "_self")
+            window.open("newsfeed.html", "_self")
             if (data.status == 202) {
                 window.location.href = '404-2.html';
             }
