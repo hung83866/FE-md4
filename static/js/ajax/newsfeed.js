@@ -259,10 +259,8 @@ function getMyTimeLine() {
     window.open("time-line.html", "_blank");
     event.preventDefault();
 }
-
-function postList() {
+function login(){
     let idUser = +parseInt(window.localStorage.getItem("iduser"));
-    let str = ""
     let str1 = ""
     let str2 = ""
     let str3 = ""
@@ -288,7 +286,146 @@ function postList() {
             console.log("sai o dau do")
         }
     })
+}
+function edit1(){
+    let idUser = +parseInt(window.localStorage.getItem("iduser"));
 
+    let str3 = ""
+    let str4 = ""
+    let name = ""
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/users/` + idUser,
+        success: function (data) {
+
+            str3 = `<img src="${data.avatar}" alt="avatar" > `
+            str4 = `<img style="margin-left: 20px;margin-right: 50px" src="${data.image}" alt="avatar" > `
+            name = `<h1 style="color: #2a62bc">${data.name}</h1>`
+
+            document.getElementById("avatarU2").innerHTML = str3
+            document.getElementById("avatarU3").innerHTML = str4
+            document.getElementById("nameU1").innerHTML = name
+            console.log(data.image)
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+
+function editform(){
+    let idUser = +parseInt(window.localStorage.getItem("iduser"));
+
+    let str= ""
+
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/users/` + idUser,
+        success: function (data) {
+
+            str = `
+\t\t\t\t\t\t\t\t<div class="central-meta">
+\t\t\t\t\t\t\t\t\t<div class="editing-info">
+\t\t\t\t\t\t\t\t\t\t<h5 class="f-title"><i class="ti-info-alt"></i> Edit Basic Information</h5>
+
+\t\t\t\t\t\t\t\t\t\t<form method="post">
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-group half">\t
+\t\t\t\t\t\t\t\t\t\t\t  <input type="text" id="name" value="${data.name}" required="required"/>
+\t\t\t\t\t\t\t\t\t\t\t  <label class="control-label" for="input">full Name</label><i class="mtrl-select"></i>
+\t\t\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-group half">\t
+\t\t\t\t\t\t\t\t\t\t\t  <input type="date" id="birthday" value="${data.birthday}"/>
+\t\t\t\t\t\t\t\t\t\t\t  <label class="control-label" for="input">Birthday</label><i class="mtrl-select"></i>
+\t\t\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-group">\t
+\t\t\t\t\t\t\t\t\t\t\t  <input type="email" id="email" value="${data.email}" required="required"/>
+\t\t\t\t\t\t\t\t\t\t\t  <label class="control-label" for="input"><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4b0e262a22270b">Email</a></label><i class="mtrl-select"></i>
+\t\t\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-group">\t
+\t\t\t\t\t\t\t\t\t\t\t  <input type="text" value="${data.phone}" id="phone" required="required"/>
+\t\t\t\t\t\t\t\t\t\t\t  <label class="control-label" for="input">Phone No.</label><i class="mtrl-select"></i>
+\t\t\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-radio">
+\t\t\t\t\t\t\t\t\t\t\t  <div class="radio">
+\t\t\t\t\t\t\t\t\t\t\t\t<label>
+\t\t\t\t\t\t\t\t\t\t\t\t  <input type="radio" value="male" id="sex" checked="checked" ><i class="check-box"></i>Male
+\t\t\t\t\t\t\t\t\t\t\t\t</label>
+\t\t\t\t\t\t\t\t\t\t\t  </div>
+\t\t\t\t\t\t\t\t\t\t\t  <div class="radio">
+\t\t\t\t\t\t\t\t\t\t\t\t<label>
+\t\t\t\t\t\t\t\t\t\t\t\t  <input type="radio" value="female" id="sex"><i class="check-box"></i>Female
+\t\t\t\t\t\t\t\t\t\t\t\t</label>
+\t\t\t\t\t\t\t\t\t\t\t  </div>
+\t\t\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-group">\t
+\t\t\t\t\t\t\t\t\t\t\t  <input type="text" value="${data.address}" id="address" required="required"/>
+\t\t\t\t\t\t\t\t\t\t\t  <label class="control-label" for="input">Address</label><i class="mtrl-select"></i>
+\t\t\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t\t\t\t
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-group">\t
+\t\t\t\t\t\t\t\t\t\t\t  <textarea rows="4"  id="interests" required="required">${data.interests}</textarea>
+\t\t\t\t\t\t\t\t\t\t\t  <label class="control-label" for="textarea">Interests</label><i class="mtrl-select"></i>
+\t\t\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t\t\t\t<div class="submit-btns">
+\t\t\t\t\t\t\t\t\t\t\t\t<button type="button" class="mtr-btn"><span><a href="mypage.html">Cancel</a></span></button>
+\t\t\t\t\t\t\t\t\t\t\t\t<button onclick="updateUser()" type="button" class="mtr-btn"><span>Update</span></button>
+\t\t\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t\t\t</form>
+\t\t\t\t\t\t\t\t\t</div>
+\t\t\t\t\t\t\t\t</div>\t
+\t\t\t\t\t\t\t`
+
+            document.getElementById("nameU").innerHTML = str
+            console.log(data.image)
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+
+
+function updateUser(){
+    let idUser = +parseInt(window.localStorage.getItem("iduser"))
+    let  name = document.getElementById("name").value;
+    let  birthday = document.getElementById("birthday").value;
+    let  email = document.getElementById("email").value;
+    let  phone = document.getElementById("phone").value;
+    let  address = document.getElementById("address").value;
+    let  sex = document.getElementById("sex").value;
+    let  interests = document.getElementById("interests").value;
+
+    let newUser = {
+        name: name,
+        birthday: birthday,
+        email: email,
+        address: address,
+        sex: sex,
+        phone: phone,
+        interests: interests
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: `http://localhost:8080/users/` + idUser,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(newUser),
+        success: function (data) {
+            // console.log("Done")
+            window.open("mypage.html", "_self")
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+
+function postList() {
+    let idUser = +parseInt(window.localStorage.getItem("iduser"));
+    let str = ""
     $.ajax({
         type: "GET",
         url: `http://localhost:8080/users/view/` + idUser,
@@ -669,4 +806,61 @@ function updateP(idPost){
             console.log("sai o dau do")
         }
     })
+}
+function profile(){
+    let str=""
+    let id = +parseInt(window.localStorage.getItem("iduser"))
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/users/+`+id,
+        success: function (data) {
+            console.log(data)
+           str=`<div class="widget">
+                                        <h4 class="widget-title">Profile</h4>
+                                        <ul class="naves">
+                                            <li>
+                                                <i class="ti-clipboard"></i>
+                                                <a>${data.username}</a>
+                                            </li>
+                                            <li>
+                                                <i class="ti-music"></i>
+                                                <a>${data.phone}</a>
+                                            </li>
+                                            <li>
+                                                <i class="ti-email"></i>
+                                                <a>${data.email}</a>
+                                            </li>
+                                            <li>
+                                                <i class="ti-comments-smiley"></i>
+                                                <a>${data.interests}</a>
+                                            </li>
+                                           
+                                            <li>
+                                                <i class="ti-home"></i>
+                                                <a>${data.address}</a>
+                                            </li>
+                                            <li>
+                                                <i class="ti-user"></i>
+                                                <a>${data.sex}</a>
+                                            </li>
+                                            <li>
+                                                <i class="ti-user"></i>
+                                                <a>${data.birthday}</a>
+                                            </li>
+                                        </ul>
+                                    </div><!-- Shortcuts -->
+                                    <div class="widget stick-widget">
+                                        <h4 class="widget-title">Image</h4>
+                                        <ul id="non-friend-list" class="followers">
+
+                                        </ul>
+                                    </div>`
+            document.getElementById("profile").innerHTML = str;
+        },
+        error: function (){
+            console.log("sai!")
+        }
+
+    })
+
 }
