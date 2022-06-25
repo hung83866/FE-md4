@@ -80,12 +80,14 @@ function upload(e) {
             image = downloadURL;
             console.log('downloadURL ===>', downloadURL);
             let divLocation = document.getElementById("imgDiv"); // sua id hien anh
+            let divLocation1 = document.getElementById("newA"); // sua id hien anh
             let imgElement = document.createElement("img");
             imgElement.src = downloadURL
             imgElement.width = 200;
             imgElement.height = 200;
             console.log('pic ==', downloadURL)
             divLocation.append(imgElement);
+            divLocation1.append(imgElement);
         });
 
 }

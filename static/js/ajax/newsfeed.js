@@ -275,8 +275,8 @@ function postList() {
             str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
             str2 = `<img src="${data.avatar}" alt="avatar" height="60px" width="60px" style="border-radius: 100%"> `
             str3 = `<img src="${data.avatar}" alt="avatar" > `
-            str4 = `<img src="${data.image}" alt="avatar" > `
-            name = `<h5 style="color: #2a62bc">${data.name}</h5>`
+            str4 = `<img style="margin-left: 20px;margin-right: 50px" src="${data.image}" alt="avatar" > `
+            name = `<h1 style="color: #2a62bc">${data.name}</h1>`
             document.getElementById("avatarU").innerHTML = str1
             document.getElementById("avatarU1").innerHTML = str2
             document.getElementById("avatarU2").innerHTML = str3
@@ -302,26 +302,86 @@ function postList() {
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-start align-items-center">
-                        <div style="width: 80px"><img class="rounded-circle shadow-1-strong me-3"
-                                 src="${data[i].userPost.avatar}" alt="avatar" width="50"
-                                 height="50" /></div>
+                        <div style="width: 100px"><img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="70"
+                                 height="70" /></div>
                             
                             <div style="width: 400px">
                                 <h5 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
-                                <p class="text-muted small mb-0">
+                               
                                     <p>status : ${data[i].status}</p>
                                     <p>time : ${data[i].time}</p>
-                                </p>
+                                    <p>${data[i].video}</p>
+                              
                               
                             </div>
-                            <div style="width: 350px" >
-                                <img onclick="editP(${data[i].idPost})" src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 15px; float: right">
+                            <div  style="width: 50px" >
+                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 15px; float: right"></button> 
+                          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+      </div>
+      <div class="modal-body">
+        <form>
+        
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Content</label>
+            <textarea name="contentPost" id="contentPost1" class="form-control"  >${data[i].content}</textarea>
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Image</label>
+            <div id="newA" > <img src="${data[i].imageFile}">
+            </div>
+            <div class="attachments">
+                                                    <ul>
+                                                        <li>
+                                                            <select name="statusPost" id="statusPost">
+                                                                <option value="public">Public</option>
+                                                                <option value="friend">Friend</option>
+                                                                <option value="private">private</option>
+                                                            </select>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-image"></i>
+                                                            <label class="fileContainer">
+                                                                <input name="imgFile" id="imgFile" type="file" onchange="upload(event)">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-video-camera"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file" id="video" onchange="upload(event)">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-camera"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file">
+                                                            </label>
+                                                        </li>
+                                                       
+                                                    </ul>
+                                                </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button onclick="updateP(${data[i].idPost})" type="button" class="btn btn-primary">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
                             </div>
-                        
-                            <div style="width: 35px">
-                                <img onclick="if (confirm('Bạn có muốn xóa bài này không?')) deletePost(${data[i].idPost})" src="https://img.icons8.com/ios-glyphs/2x/filled-trash.png" style="width: 15px; float: right">
+                            <div >
+                            <button type="button" class="btn btn-primary"  ><img  onclick="if (confirm('Bạn có muốn xóa bài này không?')) deletePost(${data[i].idPost})" src="https://img.icons8.com/ios-glyphs/2x/filled-trash.png" style="width: 15px; float: right">
+                             </button>
                             </div>
                         </div>
+                        
 
                         <h5 class="mt-3 mb-4 pb-2">
                            ${data[i].content}
@@ -381,7 +441,7 @@ function postList() {
     })
 }
 function editP(idPost){
-    let str = "";
+    return ``
 }
 
 function addNewPost() {
@@ -408,7 +468,6 @@ function addNewPost() {
         success: function (data) {
             // console.log("Done")
             window.open("mypage.html", "_self")
-            postList()
         },
         error: function () {
             console.log("sai o dau do")
@@ -475,6 +534,7 @@ function deletePost(id) {
     })
 }
 
+
 function postListAll() {
     let idUser = +parseInt(window.localStorage.getItem("iduser"))
     let str = ""
@@ -497,7 +557,7 @@ function postListAll() {
         type: "GET",
         url: `http://localhost:8080/post`,
         success: function (data) {
-            for (let i = 0; i < data.length; i++) {
+            for (let i = data.length-1; i > 0; i--) {
                 str += `
 
 <div class="central-meta item">
@@ -505,14 +565,17 @@ function postListAll() {
             <div class="friend-info">
                 <div class="card">
                         <div class="d-flex flex-start align-items-center">
-                            <img class="rounded-circle shadow-1-strong me-3"
-                                 src="${data[i].userPost.avatar}" alt="avatar" width="60"
-                                 height="60" />
-                            <div>
-                                <h6 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h6>
+                            <div style="width: 80px"><img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="50"
+                                 height="50" /></div>
+                            
+                            <div style="width: 400px">
+                                <h5 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
                                 <p class="text-muted small mb-0">
-                                    Shared publicly - Jan 2020
+                                    <p>status : ${data[i].status}</p>
+                                    <p>time : ${data[i].time}</p>
                                 </p>
+                              
                             </div>
 <!--  sửa xóa-->
                             
@@ -576,3 +639,34 @@ function postListAll() {
             console.log("sai o dau do")
         }
     })}
+
+function updateP(idPost){
+
+    let img = resultImage();
+    let video = $('#video').val();
+    let content = document.getElementById("contentPost1").value;
+    let status = $('#statusPost').val();
+    let newPost = {
+        video: video,
+        imageFile: img,
+        content: content,
+        status: status
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: `http://localhost:8080/post/` + idPost,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(newPost),
+        success: function (data) {
+            // console.log("Done")
+            window.open("mypage.html", "_self")
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
