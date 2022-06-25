@@ -81,6 +81,7 @@ function upload(e) {
             console.log('downloadURL ===>', downloadURL);
             let divLocation = document.getElementById("imgDiv"); // sua id hien anh
             let divLocation1 = document.getElementById("newA"); // sua id hien anh
+            let divLocation2 = document.getElementById("changeAvatar"); // sua id hien anh
             let imgElement = document.createElement("img");
             imgElement.src = downloadURL
             imgElement.width = 200;
@@ -88,6 +89,7 @@ function upload(e) {
             console.log('pic ==', downloadURL)
             divLocation.append(imgElement);
             divLocation1.append(imgElement);
+            divLocation2.append(imgElement);
         });
 
 }

@@ -266,20 +266,23 @@ function login(){
     let str3 = ""
     let str4 = ""
     let name = ""
+    let avatar = ""
     $.ajax({
         type: "GET",
         url: `http://localhost:8080/users/` + idUser,
         success: function (data) {
             str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
             str2 = `<img src="${data.avatar}" alt="avatar" height="60px" width="60px" style="border-radius: 100%"> `
-            str3 = `<img src="${data.avatar}" alt="avatar" > `
+            str3 = `<img src="${data.avatar}" alt="avatar"> `
             str4 = `<img style="margin-left: 20px;margin-right: 50px" src="${data.image}" alt="avatar" > `
             name = `<h1 style="color: #2a62bc">${data.name}</h1>`
+            avatar = `<img src="${data.avatar}" alt="avatar" height="200px" width="200px"> `
             document.getElementById("avatarU").innerHTML = str1
             document.getElementById("avatarU1").innerHTML = str2
             document.getElementById("avatarU2").innerHTML = str3
             document.getElementById("avatarU3").innerHTML = str4
             document.getElementById("nameU").innerHTML = name
+            document.getElementById("avatar").innerHTML = avatar
             console.log(data.image)
         },
         error: function () {
@@ -577,9 +580,7 @@ function postList() {
         }
     })
 }
-function editP(idPost){
-    return ``
-}
+
 
 function addNewPost() {
     let img = resultImage();
@@ -649,13 +650,7 @@ function getJoinedGroup() {
 }
 
 
-window.onload = function () {
-    addUser();
-    getNonFriend();
-    getFriendList();
-    postNewsfeed();
 
-}
 function deletePost(id) {
     $.ajax({
         headers: {
@@ -863,4 +858,30 @@ function profile(){
 
     })
 
+
+}
+
+function updateAvatar(){
+    let img = resultImage();
+    let idUser = +parseInt(window.localStorage.getItem("iduser"))
+    let newAvatar = {
+        avatar: img
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: `http://localhost:8080/users/avatar/` + idUser,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(newAvatar),
+        success: function (data) {
+            // console.log("Done")
+            window.open("mypage.html", "_self")
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
 }
