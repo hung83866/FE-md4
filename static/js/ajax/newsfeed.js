@@ -702,7 +702,7 @@ function postListAll() {
                                  height="50" /></div>
                             
                             <div style="width: 400px">
-                                <h5 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
+                                <h5 onclick="pageUser(${data[i].userPost.id})" class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
                                 <p class="text-muted small mb-0">
                                     <p>status : ${data[i].status}</p>
                                     <p>time : ${data[i].time}</p>
