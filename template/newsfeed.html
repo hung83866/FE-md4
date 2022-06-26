@@ -241,14 +241,12 @@
                 <div id="avatarU"></div>
                 <span class="status f-online"></span>
                 <div class="user-setting">
-                    <a href="#" title=""><span class="status f-online"></span>online</a>
-                    <a href="#" title=""><span class="status f-away"></span>away</a>
-                    <a href="#" title=""><span class="status f-off"></span>offline</a>
-                    <a href="#" title=""><i class="ti-user"></i> view profile</a>
-                    <a href="#" title=""><i class="ti-pencil-alt"></i>edit profile</a>
+                    <a onclick="newsfeed()" href="#" title="" class="ti-clipboard">Newsfeed</a>
+                    <a onclick="myPage()" href="#" title="" class="ti-clipboard">My Page</a>
+                    <a onclick="editProfileForm()" href="#" title=""><i class="ti-pencil-alt"></i>edit profile</a>
                     <a href="#" title=""><i class="ti-target"></i>activity log</a>
                     <a href="#" title=""><i class="ti-settings"></i>account setting</a>
-                    <a href="#" title=""><i class="ti-power-off"></i>log out</a>
+                    <a onclick="logout()" href="#" title=""><i class="ti-power-off"></i>log out</a>
                 </div>
             </div>
             <span class="ti-menu main-menu" data-ripple=""></span>
@@ -317,13 +315,13 @@
                                                 <div id="imgDiv"></div>
                                                 <div class="attachments">
                                                     <ul>
-                                                        <li>
-                                                            <select name="statusPost" id="statusPost">
-                                                                <option value="public">Public</option>
-                                                                <option value="friend">Friend</option>
-                                                                <option value="private">private</option>
-                                                            </select>
-                                                        </li>
+<!--                                                        <li>-->
+<!--                                                            <select name="statusPost" id="statusPost">-->
+<!--                                                                <option value="public">Public</option>-->
+<!--                                                                <option value="friend">Friend</option>-->
+<!--                                                                <option value="private">private</option>-->
+<!--                                                            </select>-->
+<!--                                                        </li>-->
                                                         <li>
                                                             <i class="fa fa-image"></i>
                                                             <label class="fileContainer">
@@ -517,7 +515,7 @@
                     <div class="widget">
                         <div class="foot-logo">
                             <div class="logo">
-                                <a href="index-2.html" title=""><img src="../static/images/logo.png" alt=""></a>
+                                <a href="mypage.html" style="height: 50px;width: 50px" title=""><img src="../static/images/cafe-building.png" alt=""></a>
                             </div>
                             <p>
                                 The trio took this simple idea and built it into the world’s leading carpooling platform.

@@ -247,10 +247,17 @@ function getTimeLine(idUser, idFriend) {
     event.preventDefault();
 }
 
-function getTimelineFriend() {
-    let idUser = localStorage.getItem("accountId");
-    window.open("timeline-friends.html", "_blank");
-    event.preventDefault();
+function getTimelineFriend(id) {
+    window.localStorage.setItem("userFriend",id)
+    let idUser = window.localStorage.getItem("iduser")
+    if (idUser==id)  {
+        window.open("mypage.html", "_self");
+        event.preventDefault();
+    }else {
+        window.open("friendPage.html", "_self");
+        event.preventDefault();
+    }
+
 }
 
 function getMyTimeLine() {
@@ -267,28 +274,34 @@ function login(){
     let str4 = ""
     let name = ""
     let avatar = ""
+    let image = ""
     $.ajax({
         type: "GET",
         url: `http://localhost:8080/users/` + idUser,
         success: function (data) {
             str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
-            str2 = `<img src="${data.avatar}" alt="avatar" height="60px" width="60px" style="border-radius: 100%"> `
+            str2 = `<img onclick="myPage()" src="${data.avatar}" alt="avatar" height="60px" width="60px" style="border-radius: 100%"> `
             str3 = `<img src="${data.avatar}" alt="avatar"> `
             str4 = `<img style="margin-left: 20px;margin-right: 50px" src="${data.image}" alt="avatar" > `
-            name = `<h1 style="color: #2a62bc">${data.name}</h1>`
+            name = `<h2 style="color: #2a62bc">${data.name}</h2>`
             avatar = `<img src="${data.avatar}" alt="avatar" height="200px" width="200px"> `
+            image = `<img src="${data.image}" alt="avatar" height="200px" width="200px"> `
             document.getElementById("avatarU").innerHTML = str1
             document.getElementById("avatarU1").innerHTML = str2
             document.getElementById("avatarU2").innerHTML = str3
             document.getElementById("avatarU3").innerHTML = str4
-            document.getElementById("nameU").innerHTML = name
+            document.getElementById("nameUser").innerHTML = name
             document.getElementById("avatar").innerHTML = avatar
-            console.log(data.image)
+            document.getElementById("image").innerHTML = image
         },
         error: function () {
             console.log("sai o dau do")
         }
     })
+}
+
+function myPage(){
+    window.open("mypage.html","_self")
 }
 function edit1(){
     let idUser = +parseInt(window.localStorage.getItem("iduser"));
@@ -314,6 +327,10 @@ function edit1(){
             console.log("sai o dau do")
         }
     })
+}
+
+function editProfileForm(){
+    window.open("edit-profile.html", "_self");
 }
 
 function editform(){
@@ -351,21 +368,21 @@ function editform(){
 \t\t\t\t\t\t\t\t\t\t\t<div class="form-radio">
 \t\t\t\t\t\t\t\t\t\t\t  <div class="radio">
 \t\t\t\t\t\t\t\t\t\t\t\t<label>
-\t\t\t\t\t\t\t\t\t\t\t\t  <input type="radio" value="male" id="sex" checked="checked" ><i class="check-box"></i>Male
+\t\t\t\t\t\t\t\t\t\t\t\t  <input type="radio" value="male" id="sex" checked="checked" name="radio"><i class="check-box"></i>Male
 \t\t\t\t\t\t\t\t\t\t\t\t</label>
 \t\t\t\t\t\t\t\t\t\t\t  </div>
-\t\t\t\t\t\t\t\t\t\t\t  <div class="radio">
+\t\t\t\t\t\t\t\t\t\t\t  <div class="radio" >
 \t\t\t\t\t\t\t\t\t\t\t\t<label>
-\t\t\t\t\t\t\t\t\t\t\t\t  <input type="radio" value="female" id="sex"><i class="check-box"></i>Female
+\t\t\t\t\t\t\t\t\t\t\t\t  <input type="radio" value="female" id="sex" name="radio"><i class="check-box"></i>Female
 \t\t\t\t\t\t\t\t\t\t\t\t</label>
 \t\t\t\t\t\t\t\t\t\t\t  </div>
 \t\t\t\t\t\t\t\t\t\t\t</div>
-\t\t\t\t\t\t\t\t\t\t\t<div class="form-group">\t
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-group">
 \t\t\t\t\t\t\t\t\t\t\t  <input type="text" value="${data.address}" id="address" required="required"/>
 \t\t\t\t\t\t\t\t\t\t\t  <label class="control-label" for="input">Address</label><i class="mtrl-select"></i>
 \t\t\t\t\t\t\t\t\t\t\t</div>
 \t\t\t\t\t\t\t\t\t\t\t
-\t\t\t\t\t\t\t\t\t\t\t<div class="form-group">\t
+\t\t\t\t\t\t\t\t\t\t\t<div class="form-group">
 \t\t\t\t\t\t\t\t\t\t\t  <textarea rows="4"  id="interests" required="required">${data.interests}</textarea>
 \t\t\t\t\t\t\t\t\t\t\t  <label class="control-label" for="textarea">Interests</label><i class="mtrl-select"></i>
 \t\t\t\t\t\t\t\t\t\t\t</div>
@@ -447,7 +464,7 @@ function postList() {
                                  height="70" /></div>
                             
                             <div style="width: 400px">
-                                <h5 class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
+                                <h5  class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
                                
                                     <p>status : ${data[i].status}</p>
                                     <p>time : ${data[i].time}</p>
@@ -456,8 +473,8 @@ function postList() {
                               
                             </div>
                             <div  style="width: 50px" >
-                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 15px; float: right"></button> 
-                          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                         <img data-bs-toggle="modal" data-bs-target="#exampleModal5" src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 25px">
+                          <div class="modal fade" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -487,13 +504,13 @@ function postList() {
                                                         <li>
                                                             <i class="fa fa-image"></i>
                                                             <label class="fileContainer">
-                                                                <input name="imgFile" id="imgFile" type="file" onchange="upload(event)">
+                                                                <input name="imgFile" id="imgFile" type="file" onchange="upload1(event)">
                                                             </label>
                                                         </li>
                                                         <li>
                                                             <i class="fa fa-video-camera"></i>
                                                             <label class="fileContainer">
-                                                                <input type="file" id="video" onchange="upload(event)">
+                                                                <input type="file" id="video" onchange="upload1(event)">
                                                             </label>
                                                         </li>
                                                         <li>
@@ -517,15 +534,15 @@ function postList() {
 </div>
                             </div>
                             <div >
-                            <button type="button" class="btn btn-primary"  ><img  onclick="if (confirm('Bạn có muốn xóa bài này không?')) deletePost(${data[i].idPost})" src="https://img.icons8.com/ios-glyphs/2x/filled-trash.png" style="width: 15px; float: right">
-                             </button>
+                            <img  onclick="if (confirm('Bạn có muốn xóa bài này không?')) deletePost(${data[i].idPost})" src="https://img.icons8.com/ios-glyphs/2x/filled-trash.png" style="width: 25px">
+                           
                             </div>
                         </div>
                         
 
-                        <h5 class="mt-3 mb-4 pb-2">
+                        <h6 class="mt-3 mb-4 pb-2">
                            ${data[i].content}
-                        </h5>
+                        </h6>
                         <img src="${data[i].imageFile}" alt="">
                         <div class="small d-flex justify-content-start">
                             <div style="width: 180px;height: 30px ;text-align: center;margin-top: 10px">
@@ -586,7 +603,7 @@ function addNewPost() {
     let img = resultImage();
     let video = $('#video').val();
     let content = $('#contentPost').val();
-    let status = $('#statusPost').val();
+    let status = "public"
     let iduser = +parseInt(window.localStorage.getItem("iduser"));
     let newPost = {
         video: video,
@@ -697,12 +714,12 @@ function postListAll() {
             <div class="friend-info">
                 <div class="card">
                         <div class="d-flex flex-start align-items-center">
-                            <div style="width: 80px"><img class="rounded-circle shadow-1-strong me-3"
+                            <div onclick="getTimelineFriend(${data[i].userPost.id})" style="width: 80px"><img class="rounded-circle shadow-1-strong me-3"
                                  src="${data[i].userPost.avatar}" alt="avatar" width="50"
                                  height="50" /></div>
                             
                             <div style="width: 400px">
-                                <h5 onclick="pageUser(${data[i].userPost.id})" class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
+                                <h5 onclick="getTimelineFriend(${data[i].userPost.id})" class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
                                 <p class="text-muted small mb-0">
                                     <p>status : ${data[i].status}</p>
                                     <p>time : ${data[i].time}</p>
@@ -713,9 +730,9 @@ function postListAll() {
                             
 <!--  end-->
                         </div>
-                        <p class="mt-3 mb-4 pb-2">
+                        <h6 class="mt-3 mb-4 pb-2">
                            ${data[i].content}
-                        </p>
+                        </h6>
                         <img src="${data[i].imageFile}" alt="">
 <!--                      minhh  fix-->
                         <div class="small d-flex justify-content-start">
@@ -743,7 +760,7 @@ function postListAll() {
                     <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                         <div class="d-flex flex-start w-100">
                             <div>
-                            <img class="rounded-circle shadow-1-strong me-3"
+                            <img onclick="getTimelineFriend(${data[i].userPost.id})" class="rounded-circle shadow-1-strong me-3"
                                  src="${data[i].userPost.avatar}" alt="avatar" width="40"
                                  height="40" />
 </div>
@@ -765,7 +782,6 @@ function postListAll() {
 `
             }
             document.getElementById("showPost").innerHTML = str;
-            console.log(str)
         },
         error: function () {
             console.log("sai o dau do")
@@ -774,7 +790,7 @@ function postListAll() {
 
 function updateP(idPost){
 
-    let img = resultImage();
+    let img = resultImage1();
     let video = $('#video').val();
     let content = document.getElementById("contentPost1").value;
     let status = $('#statusPost').val();
@@ -804,6 +820,7 @@ function updateP(idPost){
 }
 function profile(){
     let str=""
+    let name=""
     let id = +parseInt(window.localStorage.getItem("iduser"))
     $.ajax({
         type: "GET",
@@ -850,7 +867,9 @@ function profile(){
 
                                         </ul>
                                     </div>`
+            name= `<h2 style="color: #2a62bc">${data.name}</h2>`
             document.getElementById("profile").innerHTML = str;
+            document.getElementById("nameUser").innerHTML = name;
         },
         error: function (){
             console.log("sai!")
@@ -862,7 +881,7 @@ function profile(){
 }
 
 function updateAvatar(){
-    let img = resultImage();
+    let img = resultImage2();
     let idUser = +parseInt(window.localStorage.getItem("iduser"))
     let newAvatar = {
         avatar: img
@@ -884,4 +903,67 @@ function updateAvatar(){
             console.log("sai o dau do")
         }
     })
+}
+
+function updateImage(){
+    let img = resultImage3();
+    let idUser = +parseInt(window.localStorage.getItem("iduser"))
+    let newImage = {
+        avatar: img
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: `http://localhost:8080/users/image/` + idUser,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(newImage),
+        success: function (data) {
+            // console.log("Done")
+            window.open("mypage.html", "_self")
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+
+function updatePassword(){
+    let currentP = document.getElementById("currentPassword").value;
+    let newP = document.getElementById("newPassword").value;
+    let idUser = +parseInt(window.localStorage.getItem("iduser"))
+    let changeP = {
+        currentPassword:currentP,
+        newPassword:newP
+    }
+    $.ajax({
+        type: "PUT",
+        url: `http://localhost:8080/api/auth/change-password/` + idUser,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(changeP),
+        success: function (data) {
+            // console.log("Done")
+            if (data.message=="yes"){
+                alert("done, Password changed!")
+                window.open("mypage.html", "_self")
+            }
+            else{
+                alert("error, please try again!?")
+                window.open("mypage.html", "_self")
+            }
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+function logout() {
+    window.localStorage.setItem("iduser",0)
+    window.localStorage.setItem("token","")
+    window.open("login.html","_self")
 }

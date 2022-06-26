@@ -213,12 +213,12 @@
 				<div id="avatarU"></div>
 				<span class="status f-online"></span>
 				<div class="user-setting">
-					<a href="#" title=""><span class="status f-online"></span>online</a>
-					<a href="#" title=""><span class="status f-away"></span>away</a>
-					<a href="#" title=""><span class="status f-off"></span>offline</a>
-					<a href="edit-profile.html" title=""><i class="ti-pencil-alt"></i>edit profile</a>
+					<a onclick="newsfeed()" href="#" title="" class="ti-clipboard">Newsfeed</a>
+					<a onclick="myPage()" href="#" title="" class="ti-clipboard">My Page</a>
+					<a onclick="editProfileForm()" href="#" title=""><i class="ti-pencil-alt"></i>edit profile</a>
+					<a href="#" title=""><i class="ti-target"></i>activity log</a>
 					<a href="#" title=""><i class="ti-settings"></i>account setting</a>
-					<a href="#" title=""><i class="ti-power-off"></i>log out</a>
+					<a onclick="logout()" href="#" title=""><i class="ti-power-off"></i>log out</a>
 				</div>
 			</div>
 			<span class="ti-menu main-menu" data-ripple=""></span>
@@ -229,28 +229,98 @@
 		<div class="feature-photo">
 			<figure><div id="avatarU3"></div></figure>
 			<div class="add-btn">
-				<span>1205 followers</span>
-				<a href="#" title="" data-ripple="">Add Friend</a>
-			</div>
-			<form class="edit-phto">
-				<i class="fa fa-camera-retro"></i>
-				<label class="fileContainer">
+				<a style="right: 70px" class="fileContainer" data-bs-toggle="modal" data-bs-target="#exampleModal">
 					Edit Cover Photo
-					<input type="file"/>
-				</label>
-			</form>
+				</a>
+				<!--    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Display Photo</button>-->
+				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel1">Edit Photo</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+							</div>
+							<div class="modal-body">
+								<form>
+									<div class="mb-3">
+										<div>
+											<div id="image"></div>
+											<img style="margin-left: 75px" width="50px" height="50px"
+												 src="https://png.pngtree.com/png-vector/20190411/ourlarge/pngtree-vector-down-arrow-icon-png-image_924833.jpg">
+											<div id="changeImage"></div>
+										</div>
+
+										<div class="attachments">
+											<ul>
+												<li>
+													<i style="width: 30px;height: 30px" class="fa fa-image"></i>
+													<label class="fileContainer">
+														<input name="imgFile" id="imgFile2" type="file" onchange="upload3(event)">
+													</label>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</form>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+									<button onclick="updateImage()" type="button" class="btn btn-primary">Update
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="container-fluid">
 				<div class="row merged">
 					<div class="col-lg-2 col-sm-3">
 						<div style="margin-left: 50px" class="user-avatar">
 							<figure >
 								<div id="avatarU2"></div>
-								<form class="edit-phto">
-									<i class="fa fa-camera-retro"></i>
-									<label class="fileContainer">
-										Edit Display Photo
-										<input type="file"/>
+								<form>
+									<label style="width: 250px" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+										Change Avatar
 									</label>
+									<!--    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit Display Photo</button>-->
+									<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLabel">Change Avatar</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+												</div>
+												<div class="modal-body">
+													<form>
+														<div class="mb-3">
+															<div>
+																<div id="avatar"></div>
+																<img style="margin-left: 75px" width="50px" height="50px"
+																	 src="https://png.pngtree.com/png-vector/20190411/ourlarge/pngtree-vector-down-arrow-icon-png-image_924833.jpg">
+																<div id="changeAvatar"></div>
+															</div>
+
+															<div class="attachments">
+																<ul>
+																	<li>
+																		<i style="width: 30px;height: 30px" class="fa fa-image"></i>
+																		<label class="fileContainer">
+																			<input name="imgFile" id="imgFile1" type="file" onchange="upload2(event)">
+																		</label>
+																	</li>
+																</ul>
+															</div>
+														</div>
+													</form>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+														<button onclick="updateAvatar()" type="button" class="btn btn-primary">Update
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</form>
 							</figure>
 						</div>
@@ -258,11 +328,10 @@
 					<div class="col-lg-10 col-sm-9">
 						<div class="timeline-info">
 							<ul>
-								<li class="admin-name">
-									<div id="nameU1"></div>
+								<li style="width: 280px" class="admin-name">
+									<div id="nameUser"></div>
 								</li>
-
-								<li>
+								<li >
 									<a class="" href="time-line.html" title="" data-ripple="">time line</a>
 									<a class="" href="timeline-photos.html" title="" data-ripple="">Photos</a>
 									<a class="" href="timeline-videos.html" title="" data-ripple="">Videos</a>
@@ -270,8 +339,37 @@
 									<a class="" href="groups.html" title="" data-ripple="">Groups</a>
 									<a class="" href="about.html" title="" data-ripple="">about</a>
 									<a class="active" href="#" title="" data-ripple="">more</a>
+									<a  data-bs-toggle="modal" data-bs-target="#exampleModal3" style="width: 150px;height: 40px;margin-left: 70px">change password</a>
+
 								</li>
 							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel3">Change password</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="mb-3">
+
+								<label class="col-form-label">Current Password</label>
+								<input type="text" name="currentPassword" id="currentPassword" class="form-control">
+								<label class="col-form-label">New Password</label>
+								<input type="password" name="newPassword" id="newPassword" class="form-control"  >
+
+							</div>
+						</form>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button onclick="updatePassword()" type="button" class="btn btn-primary">Update
+							</button>
 						</div>
 					</div>
 				</div>
@@ -461,7 +559,7 @@
 					<div class="widget">
 						<div class="foot-logo">
 							<div class="logo">
-								<a href="index-2.html" title=""><img src="../static/images/logo.png" alt=""></a>
+								<a href="mypage.html" style="height: 50px;width: 50px" title=""><img src="../static/images/cafe-building.png" alt=""></a>
 							</div>
 							<p>
 								The trio took this simple idea and built it into the world’s leading carpooling platform.

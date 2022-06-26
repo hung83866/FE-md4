@@ -769,6 +769,7 @@ header.sticky {
     display: block;
     position: relative;
     width: 100%;
+    ;
 }
 
 .feature-photo > figure {
@@ -777,7 +778,8 @@ header.sticky {
 
 .feature-photo > figure img {
     display: inline-block;
-    width: 100%;
+    width: 97%;
+    height: 500px
 }
 
 .user-avatar {
