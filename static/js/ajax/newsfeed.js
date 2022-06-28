@@ -461,7 +461,7 @@ function postList() {
         type: "GET",
         url: `http://localhost:8080/users/view/` + idUser,
         success: function (data) {
-            for (let i = data.length - 1; i > 0; i--) {
+            for (let i = data.length - 1; i >= 0; i--) {
                 str += `
 
 <div class="central-meta item">
@@ -475,7 +475,7 @@ function postList() {
                                  height="70" /></div>
                             
                             <div style="width: 400px">
-                                <h5  class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
+                                <h5  class="fw-bold text-primary mb-1">${data[i].userPost.name}</h5>
                                
                                     <p class="fw-bold text-primary mb-1">${data[i].status}</p>
                                     <p class="fw-bold text-primary mb-1">${data[i].time}</p>
@@ -483,8 +483,8 @@ function postList() {
                               
                             </div>
                             <div  style="width: 50px" >
-                         <img data-bs-toggle="modal" data-bs-target="#exampleModal5" src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 25px">
-                          <div class="modal fade" id="exampleModal5" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                         <img data-bs-toggle="modal" data-bs-target="#exampleModalPost${i}" src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 25px">
+                          <div class="modal fade" id="exampleModalPost${i}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -496,7 +496,7 @@ function postList() {
         
           <div class="mb-3">
             <label for="message-text" class="col-form-label">Content</label>
-            <textarea name="contentPost" id="contentPost1" class="form-control"  >${data[i].content}</textarea>
+            <textarea name="contentPost" id="contentPost${i}" class="form-control"  >${data[i].content}</textarea>
           </div>
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Image</label>
@@ -505,7 +505,7 @@ function postList() {
             <div class="attachments">
                                                     <ul>
                                                         <li>
-                                                            <select name="statusPost" id="statusPost">
+                                                            <select name="statusPost" id="statusPost${i}">
                                                                 <option value="public">Public</option>
                                                                 <option value="friend">Friend</option>
                                                                 <option value="private">private</option>
@@ -537,7 +537,7 @@ function postList() {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button onclick="updateP(${data[i].idPost})" type="button" class="btn btn-primary">Update</button>
+        <button onclick="updateP(${data[i].idPost},${i})" type="button" class="btn btn-primary">Update</button>
       </div>
     </div>
   </div>
@@ -557,8 +557,8 @@ function postList() {
                         <div class="small d-flex justify-content-start">
                             <div style="width: 180px;height: 30px ;text-align: center;margin-top: 10px">
                                 <a href="#!" >
-                                    <i class="far fa-thumbs-up me-2"></i>
-                                    <p style="text-align: center">Like</p>
+                                    <i onclick="notice1(${data[i].idPost})"  class="far fa-thumbs-up me-2"></i>
+                                    <p onclick="notice1(${data[i].idPost},)" style="text-align: center">Like</p>
                                 </a>
                             </div>
                             
@@ -762,7 +762,7 @@ function postListAll() {
         success: function (data) {
 
 
-            for (let i = data.length - 1; i > 0; i--) {
+            for (let i = data.length - 1; i >= 0; i--) {
                 str += `
 
 <div class="central-meta item">
@@ -775,7 +775,7 @@ function postListAll() {
                                  height="50" /></div>
                             
                             <div style="width: 400px">
-                                <h5 onclick="getTimelineFriend(${data[i].userPost.id})" class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
+                                <h5 onclick="getTimelineFriend(${data[i].userPost.id})" class="fw-bold text-primary mb-1">${data[i].userPost.name}</h5>
                                 <p class="text-muted small mb-0">
                                     <p class="fw-bold text-primary mb-1">${data[i].status}</p>
                                     <p class="fw-bold text-primary mb-1">${data[i].time}</p>
@@ -794,8 +794,8 @@ function postListAll() {
                         <div class="small d-flex justify-content-start">
                             <div style="width: 180px;height: 30px ;text-align: center;margin-top: 10px">
                                 <a href="#!" >
-                                    <i class="far fa-thumbs-up me-2"></i>
-                                    <p style="text-align: center">Like</p>
+                                    <i onclick="notice1(${data[i].idPost})"  class="far fa-thumbs-up me-2"></i>
+                                    <p onclick="notice1(${data[i].idPost},)" style="text-align: center">Like</p>
                                 </a>
                             </div>
                             
@@ -808,7 +808,7 @@ function postListAll() {
                             <div style="width: 180px;height: 30px; text-align: center;margin-top: 10px">
                                 <a href="#!" >
                                     <i class="fas fa-share me-2"></i>
-                                    <p class="mb-0">Share</p>
+                                    <p onclick="nono()" class="mb-0">Share</p>
                                 </a>
 </div>         
                         </div>
@@ -846,6 +846,10 @@ function postListAll() {
             console.log("sai o dau do")
         }
     })
+}
+
+function like(idPost){
+
 }
 
 function searchByName(){
@@ -956,12 +960,12 @@ function avatar() {
         }
     })
 }
-        function updateP(idPost)
+        function updateP(idPost,i)
     {
         let img = resultImage1();
         let video = $('#video').val();
-        let content = document.getElementById("contentPost1").value;
-        let status = $('#statusPost').val();
+        let content = document.getElementById("contentPost"+i).value;
+        let status = document.getElementById("statusPost"+i).value;
         let newPost = {
             video: video,
             imageFile: img,
@@ -1162,31 +1166,9 @@ function showComment(idPost) {
                 <td style="width: 400px; height: 36px; background-color: #ffeeba; border-radius: 15px; margin-left: 30px; padding-left: 10px">${data[i].content}</td>
                 <td style="width: 100px">
                     <div>
-                           <img data-bs-toggle="modal" data-bs-target="#exampleModal(${data[i].idComment})"  src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 20px; float: right">
+                           <img data-bs-toggle="modal"  onclick="showFormEditModal(${data[i].idComment})"  src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 20px; float: right">
 <!--              MINH       modal editForm-->
-                     <div class="modal fade" id="exampleModal(${data[i].idComment})" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" >EDIT Comment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3">
-                        <label class="col-form-label">Content</label>
-                        <input type="text" value="${data[i].content}" name="content" id="contentCmt(${data[i].idPost})" class="form-control">
-                    </div>
-                </form>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button onclick=" editComment(${data[i].idComment}, ${data[i].post.idPost})" type="button" class="btn btn-primary">EDIT
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                     
                      </div>  
                 </td>   
                 <td style="width: 35px">
@@ -1238,6 +1220,7 @@ function addComment(idPost) {
             showComment(idPost);
             document.getElementById(`commentContent(${idPost})`).value = ''
             notice(idPost,userId);
+
         },
 
     })
@@ -1248,9 +1231,235 @@ function addComment(idPost) {
 function notice(idPost,idUser){
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8080/comment/antice/'+idPost+"/"+idUser,
+        url: 'http://localhost:8080/notice/save/'+idUser+"/"+idPost,
         success: function () {
             console.log("ok")
+        },
+        error: function (data) {
+            console.log("sai")
+        }
+    })
+}
+
+function notice1(idPost){
+    let idUser = +parseInt(window.localStorage.getItem("iduser"))
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/notice/save/like/'+idUser+"/"+idPost,
+        success: function () {
+            console.log("ok")
+            likeShow(idPost)
+        },
+        error: function (data) {
+            console.log("sai")
+        }
+    })
+}
+
+function likeShow(idPost){
+    let str = ""
+    let s = `showCmt(${idPost})`
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/post/like/'+idPost,
+        success: function (data) {
+            str=`<tr><td colspan="2" style=" font-weight: bold" onclick="showCommentNull(${idPost})">Likes (${data})</td></tr>`
+            document.getElementById(s).innerHTML = str
+        },
+        error: function (data) {
+            console.log("sai")
+        }
+    })
+}
+function hide(){
+    let count = ""
+    count = `<span>0</span>`
+    document.getElementById("count").innerHTML = count
+}
+
+function noticeList(){
+    let id = +parseInt(window.localStorage.getItem("iduser"))
+    let str = ""
+    let count = ""
+    let count1 = ""
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/notice/'+id,
+        success: function (data) {
+            count = `<span> ${data.length} notication</span>`
+            count1 = `<span>${data.length}</span>`
+            for (let i = data.length-1; i >= 0; i--) {
+                str+=`<li>
+                                <a onclick="showPost(${data[i].post.idPost})" title="">
+                                    <img style="width: 40px;height: 40px;border-radius: 100%" src="${data[i].usersFrom.avatar}" alt="">
+                                    <div class="mesg-meta">
+                                        <h5 style="color: #2a62bc;">${data[i].usersFrom.name}</h5>
+                                        <span>${data[i].notice}</span>
+                                       <i>${data[i].time}</i>
+                                    </div>
+                                </a>
+                              
+                            </li>`
+            }
+            document.getElementById("notice").innerHTML = str
+            document.getElementById("noticeCount").innerHTML = count
+            document.getElementById("count").innerHTML = count1
+        },
+        error: function (data) {
+            console.log("sai")
+        }
+    })
+}
+
+//show 1 bài viết
+function showPost(id){
+    let str = ""
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/post/'+id,
+        success: function (data) {
+            str = `<div class="central-meta item">
+        <div class="user-post">
+            <div class="friend-info">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-start align-items-center">
+                        <div style="width: 100px"><img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data.userPost.avatar}" alt="avatar" width="70"
+                                 height="70" /></div>
+                            
+                            <div style="width: 400px">
+                                <h5  class="fw-bold text-primary mb-1">${data.userPost.name}</h5>
+                               
+                                    <p class="fw-bold text-primary mb-1">${data.status}</p>
+                                    <p class="fw-bold text-primary mb-1">${data.time}</p>
+                                  
+                              
+                            </div>
+                            <div  style="width: 50px" >
+                         <img data-bs-toggle="modal" data-bs-target="#exampleModalPost${data.idPost}" src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 25px">
+                          <div class="modal fade" id="exampleModalPost${data.idPost}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+      </div>
+      <div class="modal-body">
+        <form>
+        
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Content</label>
+            <textarea name="contentPost" id="contentPost${data.id}" class="form-control"  >${data.content}</textarea>
+          </div>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Image</label>
+            <div id="newA" > <img src="${data.imageFile}">
+            </div>
+            <div class="attachments">
+                                                    <ul>
+                                                        <li>
+                                                            <select name="statusPost" id="statusPost${data.id}">
+                                                                <option value="public">Public</option>
+                                                                <option value="friend">Friend</option>
+                                                                <option value="private">private</option>
+                                                            </select>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-image"></i>
+                                                            <label class="fileContainer">
+                                                                <input name="imgFile" id="imgFile" type="file" onchange="upload1(event)">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-video-camera"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file" id="video" onchange="upload1(event)">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-camera"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file">
+                                                            </label>
+                                                        </li>
+                                                       
+                                                    </ul>
+                                                </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button onclick="updateP(${data.idPost},${data.id})" type="button" class="btn btn-primary">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+                            </div>
+                            <div >
+                            <img  onclick="if (confirm('Bạn có muốn xóa bài này không?')) deletePost(${data.idPost})" src="https://img.icons8.com/ios-glyphs/2x/filled-trash.png" style="width: 25px">
+                           
+                            </div>
+                        </div>
+                        
+
+                        <h6 class="mt-3 mb-4 pb-2">
+                           ${data.content}
+                        </h6>
+                        <img src="${data.imageFile}" alt="">
+                        <div class="small d-flex justify-content-start">
+                            <div style="width: 180px;height: 30px ;text-align: center;margin-top: 10px">
+                                <a href="#!" >
+                                    <i onclick="notice1(${data[i].idPost})"  class="far fa-thumbs-up me-2"></i>
+                                    <p onclick="notice1(${data[i].idPost},)" style="text-align: center">Like</p>
+                                </a>
+                            </div>
+                            
+                            <div style="width: 180px;height: 30px ; text-align: center;margin-top: 10px">
+                                <a href="#!">
+                                    <i onclick="showComment(${data.idPost})" class="far fa-comment-dots me-2"></i>
+                                    <p onclick="showComment(${data.idPost})" class="mb-0">Comment</p>
+                                </a>
+                            </div>
+                            <div style="width: 180px;height: 30px; text-align: center;margin-top: 10px">
+                                <a href="#!" >
+                                    <i class="fas fa-share me-2"></i>
+                                    <p class="mb-0">Share</p>
+                                </a>
+                            </div>         
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px">
+                        <table id="showCmt(${data.idPost})">
+                    </table>
+                    </div>
+                    <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                        <div class="d-flex flex-start w-100">
+                            <div style="text-align: center;margin-top: 8px">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data.userPost.avatar}" alt="avatar" width="40"
+                                 height="40" />
+</div>
+                            <div style="float: right;width: 70%" class="form-outline w-100">
+                <textarea placeholder="Comment here.."  class="form-control" id="commentContent(${data.idPost})"
+ rows="4"
+                          style="background: #fff; height: 50px;border-radius: 50px"></textarea>
+                             
+                            </div>
+                        </div>
+                        <div class="float-end mt-2 pt-1">
+                            <button onclick="addComment(${data.idPost})"
+ type="button" class="btn btn-primary btn-sm">Post comment</button>
+                            <button onclick="clearCmt(${data.idPost})" type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`
+
+            document.getElementById("showPost").innerHTML = str;
         },
         error: function (data) {
             console.log("sai")
@@ -1376,6 +1585,50 @@ function searchByContent() {
             }
             document.getElementById("showPost").innerHTML = str1;
             console.log(str1)
+        }
+    })
+}
+let idC = 0;
+function showFormEditModal(idComment) {
+    idC=idComment;
+    $(`#exampleModalCmt`).modal('show');
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        type: 'GET',
+        url: 'http://localhost:8080/comment/'+idComment,
+        success: function (data) {
+            console.log(data)
+            $('#contentCmtModal').val(data.content)
+            $('#idPost').val(data.post.idPost)
+        }
+    })
+}
+
+function editComment(idComment) {
+    idComment=idC;
+    let content = document.getElementById('contentCmtModal').value;
+    let idPost = document.getElementById('idPost').value;
+    let userId = +parseInt(window.localStorage.getItem("iduser"));
+    let newComment ={
+        content: content,
+        idUser: userId,
+        idPost: idPost
+    }
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        type: 'PUT',
+        url: 'http://localhost:8080/comment/'+idComment,
+        data: JSON.stringify(newComment),
+        success: function () {
+            showComment(idPost);
         }
     })
 }

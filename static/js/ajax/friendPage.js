@@ -146,15 +146,15 @@ function postList1(id) {
                         <div class="small d-flex justify-content-start">
                             <div style="width: 180px;height: 30px ;text-align: center;margin-top: 10px">
                                 <a href="#!" >
-                                    <i class="far fa-thumbs-up me-2"></i>
-                                    <p style="text-align: center">Like</p>
+                                    <i onclick="notice1(${data[i].idPost})"  class="far fa-thumbs-up me-2"></i>
+                                    <p onclick="notice1(${data[i].idPost},)" style="text-align: center">Like</p>
                                 </a>
                             </div>
                             
                             <div style="width: 180px;height: 30px ; text-align: center;margin-top: 10px">
                                 <a href="#!">
-                                    <i class="far fa-comment-dots me-2"></i>
-                                    <p class="mb-0">Comment</p>
+                                    <i onclick="showComment(${data[i].idPost})" class="far fa-comment-dots me-2"></i>
+                                    <p onclick="showComment(${data[i].idPost})" class="mb-0">Comment</p>
                                 </a>
                             </div>
                             <div style="width: 180px;height: 30px; text-align: center;margin-top: 10px">
@@ -162,7 +162,7 @@ function postList1(id) {
                                     <i class="fas fa-share me-2"></i>
                                     <p class="mb-0">Share</p>
                                 </a>
-                            </div>         
+                            </div>       
                         </div>
                     </div>
                     <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
