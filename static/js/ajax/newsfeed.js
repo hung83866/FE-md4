@@ -248,12 +248,12 @@ function getTimeLine(idUser, idFriend) {
 }
 
 function getTimelineFriend(id) {
-    window.localStorage.setItem("userFriend",id)
+    window.localStorage.setItem("userFriend", id)
     let idUser = window.localStorage.getItem("iduser")
-    if (idUser==id)  {
+    if (idUser == id) {
         window.open("mypage.html", "_self");
         event.preventDefault();
-    }else {
+    } else {
         window.open("friendPage.html", "_self");
         event.preventDefault();
     }
@@ -266,15 +266,18 @@ function getMyTimeLine() {
     window.open("time-line.html", "_blank");
     event.preventDefault();
 }
-function login(){
+
+function login() {
     let idUser = +parseInt(window.localStorage.getItem("iduser"));
     let str1 = ""
     let str2 = ""
     let str3 = ""
     let str4 = ""
     let name = ""
+    let name1 = ""
     let avatar = ""
     let image = ""
+
     $.ajax({
         type: "GET",
         url: `http://localhost:8080/users/` + idUser,
@@ -284,6 +287,7 @@ function login(){
             str3 = `<img src="${data.avatar}" alt="avatar"> `
             str4 = `<img style="margin-left: 20px;margin-right: 50px" src="${data.image}" alt="avatar" > `
             name = `<h2 style="color: #2a62bc">${data.name}</h2>`
+            name1 = `<a onclick="myPage()" href="#" title="" style="width: 200px; text-align: left; margin-left: 5px">${data.name}</a>`
             avatar = `<img src="${data.avatar}" alt="avatar" height="200px" width="200px"> `
             image = `<img src="${data.image}" alt="avatar" height="200px" width="200px"> `
             document.getElementById("avatarU").innerHTML = str1
@@ -291,6 +295,7 @@ function login(){
             document.getElementById("avatarU2").innerHTML = str3
             document.getElementById("avatarU3").innerHTML = str4
             document.getElementById("nameUser").innerHTML = name
+            document.getElementById("nameUser1").innerHTML = name1
             document.getElementById("avatar").innerHTML = avatar
             document.getElementById("image").innerHTML = image
         },
@@ -300,12 +305,17 @@ function login(){
     })
 }
 
-function myPage(){
-    window.open("mypage.html","_self")
+function newsfeed() {
+    window.open("newsfeed.html", "_self")
 }
-function edit1(){
-    let idUser = +parseInt(window.localStorage.getItem("iduser"));
 
+function myPage() {
+    window.open("mypage.html", "_self")
+}
+
+function edit1() {
+    let idUser = +parseInt(window.localStorage.getItem("iduser"));
+    let name1 = ""
     let str3 = ""
     let str4 = ""
     let name = ""
@@ -316,11 +326,12 @@ function edit1(){
 
             str3 = `<img src="${data.avatar}" alt="avatar" > `
             str4 = `<img style="margin-left: 20px;margin-right: 50px" src="${data.image}" alt="avatar" > `
-            name = `<h1 style="color: #2a62bc">${data.name}</h1>`
-
+            name = `<a onclick="myPage()" href="#" title="" style="width: 200px; text-align: left; margin-left: 5px">${data.name}</a>`
+            name1 = str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
             document.getElementById("avatarU2").innerHTML = str3
             document.getElementById("avatarU3").innerHTML = str4
-            document.getElementById("nameU1").innerHTML = name
+            document.getElementById("avatarU").innerHTML = name1
+            document.getElementById("nameUser1").innerHTML = name
             console.log(data.image)
         },
         error: function () {
@@ -329,14 +340,14 @@ function edit1(){
     })
 }
 
-function editProfileForm(){
+function editProfileForm() {
     window.open("edit-profile.html", "_self");
 }
 
-function editform(){
+function editform() {
     let idUser = +parseInt(window.localStorage.getItem("iduser"));
 
-    let str= ""
+    let str = ""
 
     $.ajax({
         type: "GET",
@@ -405,15 +416,15 @@ function editform(){
 }
 
 
-function updateUser(){
+function updateUser() {
     let idUser = +parseInt(window.localStorage.getItem("iduser"))
-    let  name = document.getElementById("name").value;
-    let  birthday = document.getElementById("birthday").value;
-    let  email = document.getElementById("email").value;
-    let  phone = document.getElementById("phone").value;
-    let  address = document.getElementById("address").value;
-    let  sex = document.getElementById("sex").value;
-    let  interests = document.getElementById("interests").value;
+    let name = document.getElementById("name").value;
+    let birthday = document.getElementById("birthday").value;
+    let email = document.getElementById("email").value;
+    let phone = document.getElementById("phone").value;
+    let address = document.getElementById("address").value;
+    let sex = document.getElementById("sex").value;
+    let interests = document.getElementById("interests").value;
 
     let newUser = {
         name: name,
@@ -466,10 +477,9 @@ function postList() {
                             <div style="width: 400px">
                                 <h5  class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
                                
-                                    <p>status : ${data[i].status}</p>
-                                    <p>time : ${data[i].time}</p>
-                                    <p>${data[i].video}</p>
-                              
+                                    <p class="fw-bold text-primary mb-1">${data[i].status}</p>
+                                    <p class="fw-bold text-primary mb-1">${data[i].time}</p>
+                                  
                               
                             </div>
                             <div  style="width: 50px" >
@@ -554,8 +564,8 @@ function postList() {
                             
                             <div style="width: 180px;height: 30px ; text-align: center;margin-top: 10px">
                                 <a href="#!">
-                                    <i class="far fa-comment-dots me-2"></i>
-                                    <p class="mb-0">Comment</p>
+                                    <i onclick="showComment(${data[i].idPost})" class="far fa-comment-dots me-2"></i>
+                                    <p onclick="showComment(${data[i].idPost})" class="mb-0">Comment</p>
                                 </a>
                             </div>
                             <div style="width: 180px;height: 30px; text-align: center;margin-top: 10px">
@@ -566,22 +576,28 @@ function postList() {
                             </div>         
                         </div>
                     </div>
+                    <div style="margin-top: 10px">
+                        <table id="showCmt(${data[i].idPost})">
+                    </table>
+                    </div>
                     <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                         <div class="d-flex flex-start w-100">
-                            <div>
+                            <div style="text-align: center;margin-top: 8px">
                             <img class="rounded-circle shadow-1-strong me-3"
                                  src="${data[i].userPost.avatar}" alt="avatar" width="40"
                                  height="40" />
 </div>
                             <div style="float: right;width: 70%" class="form-outline w-100">
-                <textarea placeholder="Comment here.."  class="form-control" id="textAreaExample" rows="4"
+                <textarea placeholder="Comment here.."  class="form-control" id="commentContent(${data[i].idPost})"
+ rows="4"
                           style="background: #fff; height: 50px;border-radius: 50px"></textarea>
                              
                             </div>
                         </div>
                         <div class="float-end mt-2 pt-1">
-                            <button type="button" class="btn btn-primary btn-sm">Post comment</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                            <button onclick="addComment(${data[i].idPost})"
+ type="button" class="btn btn-primary btn-sm">Post comment</button>
+                            <button onclick="clearCmt(${data[i].idPost})" type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -589,7 +605,9 @@ function postList() {
         </div>
     </div>
 `
+
             }
+
             document.getElementById("showPost").innerHTML = str;
         },
         error: function () {
@@ -601,9 +619,9 @@ function postList() {
 
 function addNewPost() {
     let img = resultImage();
-    let video = $('#video').val();
-    let content = $('#contentPost').val();
-    let status = "public"
+    let video = $('#video11').val();
+    let content = $('#contentPost11').val();
+    let status = $('#status11').val()
     let iduser = +parseInt(window.localStorage.getItem("iduser"));
     let newPost = {
         video: video,
@@ -623,6 +641,37 @@ function addNewPost() {
         success: function (data) {
             // console.log("Done")
             window.open("mypage.html", "_self")
+        },
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+
+function addNewPost1() {
+    let img = resultImage();
+    let video = $('#video11').val();
+    let content = $('#contentPost11').val();
+    let status = $('#status11').val()
+    let iduser = +parseInt(window.localStorage.getItem("iduser"));
+    let newPost = {
+        video: video,
+        imageFile: img,
+        content: content,
+        status: status
+    }
+
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8080/post/` + iduser,
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(newPost),
+        success: function (data) {
+            // console.log("Done")
+            window.open("newsfeed.html", "_self")
         },
         error: function () {
             console.log("sai o dau do")
@@ -667,7 +716,6 @@ function getJoinedGroup() {
 }
 
 
-
 function deletePost(id) {
     $.ajax({
         headers: {
@@ -689,14 +737,20 @@ function postListAll() {
     let str = ""
     let str1 = ""
     let str2 = ""
+    let name = ""
+    let avatar = ""
     $.ajax({
         type: "GET",
         url: `http://localhost:8080/users/` + idUser,
         success: function (data) {
             str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
             str2 = `<img src="${data.avatar}" alt="avatar" height="60px" width="60px" style="border-radius: 100%"> `
+            name = `<a onclick="myPage()" href="#" title="" style="width: 200px; text-align: left; margin-left: 5px">${data.name}</a>`
+
             document.getElementById("avatarU").innerHTML = str1
             document.getElementById("avatarU1").innerHTML = str2
+            document.getElementById("nameUser1").innerHTML = name
+
         },
         error: function () {
             console.log("sai o dau do")
@@ -706,7 +760,9 @@ function postListAll() {
         type: "GET",
         url: `http://localhost:8080/post`,
         success: function (data) {
-            for (let i = data.length-1; i > 0; i--) {
+
+
+            for (let i = data.length - 1; i > 0; i--) {
                 str += `
 
 <div class="central-meta item">
@@ -721,8 +777,8 @@ function postListAll() {
                             <div style="width: 400px">
                                 <h5 onclick="getTimelineFriend(${data[i].userPost.id})" class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
                                 <p class="text-muted small mb-0">
-                                    <p>status : ${data[i].status}</p>
-                                    <p>time : ${data[i].time}</p>
+                                    <p class="fw-bold text-primary mb-1">${data[i].status}</p>
+                                    <p class="fw-bold text-primary mb-1">${data[i].time}</p>
                                 </p>
                               
                             </div>
@@ -745,8 +801,8 @@ function postListAll() {
                             
                             <div style="width: 180px;height: 30px ; text-align: center;margin-top: 10px">
                                 <a href="#!">
-                                    <i class="far fa-comment-dots me-2"></i>
-                                    <p class="mb-0">Comment</p>
+                                    <i onclick="showComment(${data[i].idPost})" class="far fa-comment-dots me-2"></i>
+                                    <p onclick="showComment(${data[i].idPost})" class="mb-0">Comment</p>
                                 </a>
                             </div>
                             <div style="width: 180px;height: 30px; text-align: center;margin-top: 10px">
@@ -757,22 +813,25 @@ function postListAll() {
 </div>         
                         </div>
                     </div>
+                    <div style="margin-top: 10px">
+                        <table id="showCmt(${data[i].idPost})">
+                    </table>
+                    </div>
                     <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                         <div class="d-flex flex-start w-100">
-                            <div>
-                            <img onclick="getTimelineFriend(${data[i].userPost.id})" class="rounded-circle shadow-1-strong me-3"
-                                 src="${data[i].userPost.avatar}" alt="avatar" width="40"
-                                 height="40" />
+                            <div style="text-align: center;margin-top: 8px">
+                            <div id="Avatar(${i})"></div>
 </div>
                             <div style="float: right;width: 70%" class="form-outline w-100">
-                <textarea placeholder="Comment here.."  class="form-control" id="textAreaExample" rows="4"
+                <textarea placeholder="Comment here.."  class="form-control" id="commentContent(${data[i].idPost})"
+ rows="4"
                           style="background: #fff; height: 50px;border-radius: 50px"></textarea>
                              
                             </div>
                         </div>
                         <div class="float-end mt-2 pt-1">
-                            <button type="button" class="btn btn-primary btn-sm">Post comment</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="addComment(${data[i].idPost})">Post comment</button>
+                            <button onclick="clearCmt(${data[i].idPost})" type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -786,48 +845,158 @@ function postListAll() {
         error: function () {
             console.log("sai o dau do")
         }
-    })}
+    })
+}
 
-function updateP(idPost){
-
-    let img = resultImage1();
-    let video = $('#video').val();
-    let content = document.getElementById("contentPost1").value;
-    let status = $('#statusPost').val();
-    let newPost = {
-        video: video,
-        imageFile: img,
-        content: content,
-        status: status
+function searchByName(){
+    let id  = +parseInt(window.localStorage.getItem("iduser"))
+    let name = document.getElementById("searchName").value
+    let avatarFriend = ""
+    if (name==""){
+        listFriendUser()
     }
-
     $.ajax({
-        type: "PUT",
-        url: `http://localhost:8080/post/` + idPost,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify(newPost),
+        type: "GET",
+        url: `http://localhost:8080/users/search/`+name,
         success: function (data) {
-            // console.log("Done")
-            window.open("mypage.html", "_self")
+            for (let i = 0; i < data.length; i++) {
+                if (id==data[i].id){
+                    avatarFriend+="";
+                }else
+                    avatarFriend += `<figure>
+                                                <a  href="#" title="" ><img  style="border-radius: 100%;height: 60px;width: 60px" src="${data[i].avatar}" alt=""></a>
+                                            </figure>
+                                            <div class="page-meta">
+                                                <a href="#" title="" class="underline">${data[i].name}</a>
+                                            </div>
+                                            <div class="page-likes">
+                                                <ul class="nav nav-tabs likes-btn">
+                                                    <li class="nav-item"><a class="active" href="#link1" data-toggle="tab">Inbox</a></li>
+                                                    <li class="nav-item"><a class="" href="#link2" data-toggle="tab">views</a></li>
+                                                </ul>
+                                                <!-- Tab panes -->
+
+                                            </div>`
+            }
+            document.getElementById("friendList").innerHTML=avatarFriend
+
         },
+
+
         error: function () {
             console.log("sai o dau do")
         }
     })
 }
-function profile(){
-    let str=""
-    let name=""
-    let id = +parseInt(window.localStorage.getItem("iduser"))
+
+function listFriendUser(){
+    let id  = +parseInt(window.localStorage.getItem("iduser"))
+    let avatarFriend = ""
     $.ajax({
         type: "GET",
-        url: `http://localhost:8080/users/+`+id,
+        url: `http://localhost:8080/users/list`,
         success: function (data) {
-            console.log(data)
-           str=`<div class="widget">
+            for (let i = 0; i < data.length; i++) {
+                if (id==data[i].id){
+                    avatarFriend+="";
+                }else
+                    avatarFriend += `<figure>
+                                                <a  href="#" title="" ><img  style="border-radius: 100%;height: 60px;width: 60px" src="${data[i].avatar}" alt=""></a>
+                                            </figure>
+                                            <div class="page-meta">
+                                                <a href="#" title="" class="underline">${data[i].name}</a>
+                                            </div>
+                                            <div class="page-likes">
+                                                <ul class="nav nav-tabs likes-btn">
+                                                    <li class="nav-item"><a class="active" href="#link1" data-toggle="tab">Inbox</a></li>
+                                                    <li class="nav-item"><a class="" href="#link2" data-toggle="tab">views</a></li>
+                                                </ul>
+                                                <!-- Tab panes -->
+
+                                            </div>`
+            }
+            document.getElementById("friendList").innerHTML=avatarFriend
+            },
+
+
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+
+function avatar() {
+    let idUser = +parseInt(window.localStorage.getItem("iduser"))
+    let avatar1 = ""
+
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/post`,
+        success: function (data) {
+            $.ajax({
+                type: "GET",
+                url: `http://localhost:8080/users/` + idUser,
+                success: function (data1) {
+                    for (let i = data.length-1; i > 0; i--) {
+                        avatar1 = `<img onclick="getTimelineFriend(${data1.id})" class="rounded-circle shadow-1-strong me-3"
+                                 src="${data1.avatar}" alt="avatar" width="40"
+                                 height="40" >`
+                        document.getElementById(`Avatar(${i})`).innerHTML = avatar1;
+                    }
+                    },
+
+                error: function () {
+                    console.log("sai o dau do")
+                }
+            })
+        },
+
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
+}
+        function updateP(idPost)
+    {
+        let img = resultImage1();
+        let video = $('#video').val();
+        let content = document.getElementById("contentPost1").value;
+        let status = $('#statusPost').val();
+        let newPost = {
+            video: video,
+            imageFile: img,
+            content: content,
+            status: status
+        }
+
+        $.ajax({
+            type: "PUT",
+            url: `http://localhost:8080/post/` + idPost,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(newPost),
+            success: function (data) {
+                // console.log("Done")
+                window.open("mypage.html", "_self")
+            },
+            error: function () {
+                console.log("sai o dau do")
+            }
+        })
+    }
+
+    function profile() {
+        let str = ""
+        let name = ""
+        let id = +parseInt(window.localStorage.getItem("iduser"))
+        $.ajax({
+            type: "GET",
+            url: `http://localhost:8080/users/+` + id,
+            success: function (data) {
+                console.log(data)
+                str = `<div class="widget">
                                         <h4 class="widget-title">Profile</h4>
                                         <ul class="naves">
                                             <li>
@@ -835,7 +1004,7 @@ function profile(){
                                                 <a>${data.username}</a>
                                             </li>
                                             <li>
-                                                <i class="ti-music"></i>
+                                                <i class="fa-solid fa-phone-flip"></i>
                                                 <a>${data.phone}</a>
                                             </li>
                                             <li>
@@ -856,7 +1025,7 @@ function profile(){
                                                 <a>${data.sex}</a>
                                             </li>
                                             <li>
-                                                <i class="ti-user"></i>
+                                                <i class="fa-solid fa-calendar-days"></i>
                                                 <a>${data.birthday}</a>
                                             </li>
                                         </ul>
@@ -867,103 +1036,326 @@ function profile(){
 
                                         </ul>
                                     </div>`
-            name= `<h2 style="color: #2a62bc">${data.name}</h2>`
-            document.getElementById("profile").innerHTML = str;
-            document.getElementById("nameUser").innerHTML = name;
-        },
-        error: function (){
-            console.log("sai!")
-        }
-
-    })
-
-
-}
-
-function updateAvatar(){
-    let img = resultImage2();
-    let idUser = +parseInt(window.localStorage.getItem("iduser"))
-    let newAvatar = {
-        avatar: img
-    }
-
-    $.ajax({
-        type: "PUT",
-        url: `http://localhost:8080/users/avatar/` + idUser,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify(newAvatar),
-        success: function (data) {
-            // console.log("Done")
-            window.open("mypage.html", "_self")
-        },
-        error: function () {
-            console.log("sai o dau do")
-        }
-    })
-}
-
-function updateImage(){
-    let img = resultImage3();
-    let idUser = +parseInt(window.localStorage.getItem("iduser"))
-    let newImage = {
-        avatar: img
-    }
-
-    $.ajax({
-        type: "PUT",
-        url: `http://localhost:8080/users/image/` + idUser,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify(newImage),
-        success: function (data) {
-            // console.log("Done")
-            window.open("mypage.html", "_self")
-        },
-        error: function () {
-            console.log("sai o dau do")
-        }
-    })
-}
-
-function updatePassword(){
-    let currentP = document.getElementById("currentPassword").value;
-    let newP = document.getElementById("newPassword").value;
-    let idUser = +parseInt(window.localStorage.getItem("iduser"))
-    let changeP = {
-        currentPassword:currentP,
-        newPassword:newP
-    }
-    $.ajax({
-        type: "PUT",
-        url: `http://localhost:8080/api/auth/change-password/` + idUser,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify(changeP),
-        success: function (data) {
-            // console.log("Done")
-            if (data.message=="yes"){
-                alert("done, Password changed!")
-                window.open("mypage.html", "_self")
+                name = `<h2 style="color: #2a62bc">${data.name}</h2>`
+                document.getElementById("profile").innerHTML = str;
+                document.getElementById("nameUser").innerHTML = name;
+            },
+            error: function () {
+                console.log("sai!")
             }
-            else{
-                alert("error, please try again!?")
+
+        })
+
+
+    }
+
+    function updateAvatar() {
+        let img = resultImage2();
+        let idUser = +parseInt(window.localStorage.getItem("iduser"))
+        let newAvatar = {
+            avatar: img
+        }
+
+        $.ajax({
+            type: "PUT",
+            url: `http://localhost:8080/users/avatar/` + idUser,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(newAvatar),
+            success: function (data) {
+                // console.log("Done")
                 window.open("mypage.html", "_self")
+            },
+            error: function () {
+                console.log("sai o dau do")
             }
+        })
+    }
+
+    function updateImage() {
+        let img = resultImage3();
+        let idUser = +parseInt(window.localStorage.getItem("iduser"))
+        let newImage = {
+            avatar: img
+        }
+
+        $.ajax({
+            type: "PUT",
+            url: `http://localhost:8080/users/image/` + idUser,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(newImage),
+            success: function (data) {
+                // console.log("Done")
+                window.open("mypage.html", "_self")
+            },
+            error: function () {
+                console.log("sai o dau do")
+            }
+        })
+    }
+
+    function updatePassword() {
+        let currentP = document.getElementById("currentPassword").value;
+        let newP = document.getElementById("newPassword").value;
+        let idUser = +parseInt(window.localStorage.getItem("iduser"))
+        let changeP = {
+            currentPassword: currentP,
+            newPassword: newP
+        }
+        $.ajax({
+            type: "PUT",
+            url: `http://localhost:8080/api/auth/change-password/` + idUser,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify(changeP),
+            success: function (data) {
+                console.log(data)
+                // console.log("Done")
+                if (data.message == "yes") {
+                    alert("done, Password changed!")
+                    window.open("mypage.html", "_self")
+                } else {
+                    alert("error, please try again!?")
+                    window.open("mypage.html", "_self")
+                }
+            },
+            error: function () {
+                console.log("sai o dau do")
+            }
+        })
+    }
+
+    function logout() {
+        window.localStorage.setItem("iduser", 0)
+        window.localStorage.setItem("token", "")
+        window.open("login.html", "_self")
+    }
+
+// minh show cmt
+function showComment(idPost) {
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/post/viewcomment/'+idPost,
+        success: function (data) {
+            let s = `showCmt(${idPost})`
+            console.log(data)
+            let str=`<tr><td colspan="2" style=" font-weight: bold" onclick="showCommentNull(${idPost})">Comment (${data.length})</td></tr>`;
+            for (let i = 0; i < data.length; i++) {
+                str += `
+                <tr>
+                <td rowspan="2">
+                <div style="width: 50px;text-align: center"><img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].user.avatar}" alt="avatar" width="25"
+                                 height="25" /></div>
+                </td>
+                <td style=" font-weight: bold">${data[i].user.username}</td>
+                <td></td>
+                </tr>
+                <tr>
+                <td style="width: 400px; height: 36px; background-color: #ffeeba; border-radius: 15px; margin-left: 30px; padding-left: 10px">${data[i].content}</td>
+                <td style="width: 100px">
+                    <div>
+                           <img data-bs-toggle="modal" data-bs-target="#exampleModal(${data[i].idComment})"  src="https://img.icons8.com/material-outlined/344/edit--v1.png" style="width: 20px; float: right">
+<!--              MINH       modal editForm-->
+                     <div class="modal fade" id="exampleModal(${data[i].idComment})" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" >EDIT Comment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="col-form-label">Content</label>
+                        <input type="text" value="${data[i].content}" name="content" id="contentCmt(${data[i].idPost})" class="form-control">
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button onclick=" editComment(${data[i].idComment}, ${data[i].post.idPost})" type="button" class="btn btn-primary">EDIT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                     </div>  
+                </td>   
+                <td style="width: 35px">
+                    <div>
+                        <img onclick="if (confirm('Chắc chưa?')) deleteComment(${data[i].idComment}, ${data[i].post.idPost})" src="https://img.icons8.com/ios-glyphs/2x/filled-trash.png" style="width: 20px; float: right">
+                    </div>
+                </td>         
+                            
+
+                </tr>
+                `
+            }
+            document.getElementById(s).innerHTML = str;
         },
-        error: function () {
-            console.log("sai o dau do")
+        error: function (data) {
+            console.log("sai")
+        }
+    })
+    // minh add c
+
+
+}
+function showCommentNull(idPost) {
+    let s = `showCmt(${idPost})`
+    let x = ""
+    document.getElementById(s).innerHTML = x;
+
+
+}
+
+function addComment(idPost) {
+    let content = document.getElementById(`commentContent(${idPost})`).value;
+    let userId = +parseInt(window.localStorage.getItem("iduser"));
+    let newComment ={
+        content: content,
+        idUser: userId,
+        idPost: idPost
+    }
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        type: 'POST',
+        url: 'http://localhost:8080/comment',
+        data: JSON.stringify(newComment),
+        success: function () {
+            showComment(idPost);
+            document.getElementById(`commentContent(${idPost})`).value = ''
         }
     })
 }
-function logout() {
-    window.localStorage.setItem("iduser",0)
-    window.localStorage.setItem("token","")
-    window.open("login.html","_self")
+
+// minh xóa cmt
+function deleteComment(idComment, idPost) {
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        type: 'DELETE',
+        url: 'http://localhost:8080/comment/'+idComment,
+        success: function () {
+            showComment(idPost)
+        }
+    })
+}
+
+// minh clear cmt
+function clearCmt(idPost) {
+    document.getElementById(`commentContent(${idPost})`).value = '';
+}
+
+function searchByContent() {
+    let content = document.getElementById("searchPost").value;
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        type: 'GET',
+        url: 'http://localhost:8080/post/search?content=' + content,
+        success: function (data) {
+            let str1 = ''
+            for (let i = data.length-1; i >= 0; i--) {
+                str1 += `
+<div class="central-meta item">
+        <div class="user-post">
+            <div class="friend-info">
+                <div class="card">
+                        <div class="d-flex flex-start align-items-center">
+                            <div style="width: 80px"><img class="rounded-circle shadow-1-strong me-3"
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="50"
+                                 height="50" /></div>
+                            
+                            <div style="width: 400px">
+                                <h5 onclick="pageUser(${data[i].userPost.id})" class="fw-bold text-primary mb-1">${data[i].userPost.username}</h5>
+                                <p class="text-muted small mb-0">
+                                    <p>status : ${data[i].status}</p>
+                                    <p>time : ${data[i].time}</p>
+                                </p>
+                              
+                            </div>
+
+                        </div>
+                        <p class="mt-3 mb-4 pb-2">
+                           ${data[i].content}
+                        </p>
+                        <img src="${data[i].imageFile}" alt="">
+<!--                      minhh  fix-->
+                        <div class="small d-flex justify-content-start">
+                            <div style="width: 180px;height: 30px ;text-align: center;margin-top: 10px">
+                                <a href="#!" >
+                                    <i class="far fa-thumbs-up me-2"></i>
+                                    <p style="text-align: center">Like</p>
+                                </a>
+                            </div>
+                            
+                            <div style="width: 180px;height: 30px ; text-align: center;margin-top: 10px">
+                                <a href="#!">
+                                    <i class="far fa-comment-dots me-2"></i>
+                                    <p onclick="showComment(${data[i].idPost})" class="mb-0">Comment</p>
+                                </a>
+                            </div>
+                            <div style="width: 180px;height: 30px; text-align: center;margin-top: 10px">
+                                <a href="#!" >
+                                    <i class="fas fa-share me-2"></i>
+                                    <p class="mb-0">Share</p>
+                                </a>
+</div>         
+                        </div>
+                    </div>
+<!--                    minh-->
+                    
+                    <div style="margin-top: 10px">
+                        <table id="${data[i].idPost}">
+                    </table>
+                    </div>
+                    
+                    <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                        <div class="d-flex flex-start w-100">
+                            <div>
+                            <img class="rounded-circle shadow-1-strong me-3"
+                            
+                                 src="${data[i].userPost.avatar}" alt="avatar" width="40"
+                                 height="40" />
+</div>
+                            <div style="float: right;width: 70%" class="form-outline w-100">
+                <input placeholder="Comment here.."  class="form-control" name="addCmt" id="commentContent(${data[i].idPost})" rows="4"
+                          style="background: #fff; height: 50px;border-radius: 50px">
+                             
+                            </div>
+                        </div>
+                        <div class="float-end mt-2 pt-1">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="addComment(${data[i].idPost})">Post comment</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="clearCmt(${data[i].idPost})">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+`
+            }
+            document.getElementById("showPost").innerHTML = str1;
+            console.log(str1)
+        }
+    })
 }

@@ -21,9 +21,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
-	<title>Winku Social Network Toolkit</title>
-	<link rel="icon" href="../static/images/fav.png" type="image/png" sizes="16x16">
-
+	<title>Coffee_CG Social Network </title>
+	<link rel="icon" href="../static/images/cafe-building.png.png" type="image/png" sizes="16x16">
+	<link rel="icon" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 	<link rel="stylesheet" href="../static/css/main.min.css">
 	<link rel="stylesheet" href="../static/css/strip.css">
 	<link rel="stylesheet" href="../static/css/style.css">
@@ -35,7 +35,7 @@
 </head>
 <body>
 <script>window.onload=function (){
-
+	listFriendUser()
 	profile()
 	edit1()
 	editform()
@@ -44,63 +44,23 @@
 <div class="theme-layout">
 
 	<div class="topbar stick">
-		<div class="logo">
+		<div class="logo"  style="width: 70px">
 			<a  href="newsfeed.html"><img style="width: 60px ;height: 60px" src="../static/images/cafe-building.png" alt=""></a>
 		</div>
 
-		<div class="top-area">
-			<ul class="main-menu">
+		<div class="top-area" style="float: right">
+			<ul class="main-menu" >
 				<li>
-					<a href="#" title="">Home</a>
-					<ul>
-						<li><a href="index-2.html" title="">Home Social</a></li>
-						<li><a href="index2.html" title="">Home Social 2</a></li>
-						<li><a href="index-company.html" title="">Home Company</a></li>
-						<li><a href="landing.html" title="">Login page</a></li>
-						<li><a href="logout.html" title="">Logout Page</a></li>
-						<li><a href="newsfeed.html" title="">news feed</a></li>
-					</ul>
+					<div id="nameUser1" ></div>
 				</li>
 				<li>
-					<a href="#" title="">timeline</a>
-					<ul>
-						<li><a href="time-line.html" title="">timeline</a></li>
-						<li><a href="timeline-friends.html" title="">timeline friends</a></li>
-						<li><a href="timeline-groups.html" title="">timeline groups</a></li>
-						<li><a href="timeline-pages.html" title="">timeline pages</a></li>
-						<li><a href="timeline-photos.html" title="">timeline photos</a></li>
-						<li><a href="timeline-videos.html" title="">timeline videos</a></li>
-						<li><a href="fav-page.html" title="">favourit page</a></li>
-						<li><a href="groups.html" title="">groups page</a></li>
-						<li><a href="page-likers.html" title="">Likes page</a></li>
-						<li><a href="people-nearby.html" title="">people nearby</a></li>
-					</ul>
+					<a href="newsfeed.html" title="">Newsfeed</a>
 				</li>
 				<li>
-					<a href="#" title="">account settings</a>
-					<ul>
-						<li><a href="create-fav-page.html" title="">create fav page</a></li>
-						<li><a href="edit-account-setting.html" title="">edit account setting</a></li>
-						<li><a href="edit-interest.html" title="">edit-interest</a></li>
-						<li><a href="edit-password.html" title="">edit-password</a></li>
-						<li><a href="edit-profile-basic.html" title="">edit profile basics</a></li>
-						<li><a href="edit-work-eductation.html" title="">edit work educations</a></li>
-						<li><a href="messages.html" title="">message box</a></li>
-						<li><a href="inbox.html" title="">Inbox</a></li>
-						<li><a href="notifications.html" title="">notifications page</a></li>
-					</ul>
+					<a href="edit-profile.html" title="">account settings</a>
 				</li>
 				<li>
-					<a href="#" title="">more pages</a>
-					<ul>
-						<li><a href="404.html" title="">404 error page</a></li>
-						<li><a href="about.html" title="">about</a></li>
-						<li><a href="contact.html" title="">contact</a></li>
-						<li><a href="faq.html" title="">faq's page</a></li>
-						<li><a href="insights.html" title="">insights</a></li>
-						<li><a href="knowledge-base.html" title="">knowledge base</a></li>
-						<li><a href="widgets.html" title="">Widgts</a></li>
-					</ul>
+					<a href="#" title="">Groups</a>
 				</li>
 			</ul>
 			<ul class="setting-area">
@@ -213,8 +173,8 @@
 				<div id="avatarU"></div>
 				<span class="status f-online"></span>
 				<div class="user-setting">
-					<a onclick="newsfeed()" href="#" title="" class="ti-clipboard">Newsfeed</a>
-					<a onclick="myPage()" href="#" title="" class="ti-clipboard">My Page</a>
+					<a onclick="newsfeed()" href="#" title="" ><i class="ti-clipboard"></i> Newsfeed</a>
+					<a onclick="myPage()" href="#" title="" ><i class="ti-clipboard"></i> My Page</a>
 					<a onclick="editProfileForm()" href="#" title=""><i class="ti-pencil-alt"></i>edit profile</a>
 					<a href="#" title=""><i class="ti-target"></i>activity log</a>
 					<a href="#" title=""><i class="ti-settings"></i>account setting</a>
@@ -387,8 +347,12 @@
 						<div class="row" id="page-contents">
 							<div class="col-lg-3">
 								<aside class="sidebar static">
-									<div id="profile"></div>
-									<!-- who's following -->
+									<div class="widget">
+										<h4 class="widget-title">Friend List</h4>
+										<div class="your-page">
+											<div id="friendList"></div>
+										</div>
+									</div><!-- page like widget -->
 								</aside>
 							</div><!-- sidebar -->
 							<div  class="col-lg-6">

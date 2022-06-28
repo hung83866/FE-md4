@@ -26,12 +26,14 @@ function login1(id){
 }
 function login2(){
     let str1 = ""
+    let name = ""
     let id = +parseInt(window.localStorage.getItem("iduser"));
     $.ajax({
         type: "GET",
         url: `http://localhost:8080/users/` + id,
         success: function (data) {
             str1 = `<img src="${data.avatar}" alt="avatar" height="40px" width="40px" style="border-radius: 100%"> `
+            name = `<a onclick="myPage()" href="#" title="" style="width: 200px; text-align: left; margin-left: 5px">${data.name}</a>`
             document.getElementById("avatarU").innerHTML = str1
 
         },
@@ -39,6 +41,8 @@ function login2(){
             console.log("sai o dau do")
         }
     })
+}function newsfeed(){
+    window.open("newsfeed.html","_self")
 }
 
 function profile1(id){
@@ -196,4 +200,40 @@ function logout() {
     window.localStorage.setItem("iduser",0)
     window.localStorage.setItem("token","")
     window.open("login.html","_self")
+}
+function listFriendUser() {
+    let id = +parseInt(window.localStorage.getItem("iduser"));
+    let avatarFriend = ""
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/users/list`,
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                if (id==data[i].id){
+                    avatarFriend+="";
+                }else
+
+                avatarFriend += `<figure>
+                                                <a  href="#" title="" ><img  style="border-radius: 100%;height: 60px;width: 60px" src="${data[i].avatar}" alt=""></a>
+                                            </figure>
+                                            <div class="page-meta">
+                                                <a href="#" title="" class="underline">${data[i].name}</a>
+                                            </div>
+                                            <div class="page-likes">
+                                                <ul class="nav nav-tabs likes-btn">
+                                                    <li class="nav-item"><a class="active" href="#link1" data-toggle="tab">Inbox</a></li>
+                                                    <li class="nav-item"><a class="" href="#link2" data-toggle="tab">views</a></li>
+                                                </ul>
+                                                <!-- Tab panes -->
+
+                                            </div>`
+            }
+            document.getElementById("friendList").innerHTML = avatarFriend
+        },
+
+
+        error: function () {
+            console.log("sai o dau do")
+        }
+    })
 }
