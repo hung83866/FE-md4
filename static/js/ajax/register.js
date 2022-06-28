@@ -1,10 +1,10 @@
 function register() {
-    let name = $('#name').val();
+    let name = $('#name1').val();
     let username = $('#username1').val();
-    let phone = $('#phone').val();
-    let email = $('#email').val();
+    let phone = $('#phone1').val();
+    let email = $('#email1').val();
     let password = $('#password1').val();
-    let birthday = $('#birthday').val();
+    let birthday = $('#birthday1').val();
     let roles = ["user"];
     let userInfo = {
         name: name,

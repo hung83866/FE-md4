@@ -1220,7 +1220,7 @@ function showCommentNull(idPost) {
 function addComment(idPost) {
     let content = document.getElementById(`commentContent(${idPost})`).value;
     let userId = +parseInt(window.localStorage.getItem("iduser"));
-    let newComment ={
+    let newComment = {
         content: content,
         idUser: userId,
         idPost: idPost
@@ -1237,6 +1237,23 @@ function addComment(idPost) {
         success: function () {
             showComment(idPost);
             document.getElementById(`commentContent(${idPost})`).value = ''
+            notice(idPost,userId);
+        },
+
+    })
+}
+
+// hiên thong bao
+
+function notice(idPost,idUser){
+    $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/comment/antice/'+idPost+"/"+idUser,
+        success: function () {
+            console.log("ok")
+        },
+        error: function (data) {
+            console.log("sai")
         }
     })
 }
@@ -1253,6 +1270,9 @@ function deleteComment(idComment, idPost) {
         url: 'http://localhost:8080/comment/'+idComment,
         success: function () {
             showComment(idPost)
+        },
+        error: function (data) {
+            console.log("sai")
         }
     })
 }
